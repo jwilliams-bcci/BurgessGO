@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BurgessGO</string>
+    <string name="app_title">Burgess GO</string>
+    <string name="Password">Password</string>
+    <string name="Login">Login</string>
+    <string name="UserID">User ID</string>
+    <string name="user_name">User Name</string>
+</resources>

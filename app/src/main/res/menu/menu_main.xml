@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuItem_upcomingInspections"
+        android:title="Upcoming Inspections" />
+    <item
+        android:id="@+id/menuItem_nonPassedInspections"
+        android:title="Non Passed Inspections" />
+    <item
+        android:id="@+id/menuItem_myHomes"
+        android:title="My Homes" />
+    <item
+        android:id="@+id/menuItem_activateHomes"
+        android:title="Activate Homes" />
+    <item
+        android:id="@+id/menuItem_deactivateHomes"
+        android:title="Deactivate Homes" />
+    <item
+        android:id="@+id/menuItem_shareHomes"
+        android:title="Share Homes" />
+    <item
+        android:id="@+id/menuItem_requestHome"
+        android:title="Request Home Access" />
+    <item
+        android:id="@+id/menuItem_help"
+        android:title="Help" />
+    <item
+        android:id="@+id/menuItem_changePassword"
+        android:title="Change Password" />
+    <item
+        android:id="@+id/menuItem_logout"
+        android:title="Logout" />
+</menu>
