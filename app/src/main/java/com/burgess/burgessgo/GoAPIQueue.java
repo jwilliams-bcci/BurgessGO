@@ -20,25 +20,29 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import data.models.Inspection;
+import data.models.NonPassedInspection;
 
 public class GoAPIQueue {
-    private static final String TAG = "API";
+    private static final String TAG = "GO_API";
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String AUTH_BEARER = "Bearer ";
     private static final String LOGIN_URL = "Login?userName=%s&password=%s";
     private static final String GET_UPCOMING_INSPECTIONS_URL = "GetUpcomingInspections?builderPersonnelId=%s";
+    private static final String GET_NON_PASSED_INSPECTIONS_URL = "GetNonPassedInspections?builderPersonnelId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -122,25 +126,25 @@ public class GoAPIQueue {
             for (int lcv = 0; lcv < response.length(); lcv++) {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
-                    Inspection inspection = new Inspection();
-                    inspection.setInspectionId(obj.optInt("InspectionId"));
-                    inspection.setInspectionDate(OffsetDateTime.parse(obj.optString("InspectionDate")));
-                    inspection.setInspectionStatus(obj.optString("InspectionStatus"));
-                    inspection.setCommunityName(obj.optString("CommunityName"));
-                    inspection.setStreetNumber(obj.optString("StreetNumber"));
-                    inspection.setStreetName(obj.optString("StreetName"));
-                    inspection.setAddressToDisplay(obj.optString("AddressToDisplay"));
-                    inspection.setAddressToDisplay2(obj.optString("AddressToDisplay2"));
-                    inspection.setTypeName(obj.optString("TypeName"));
-                    inspection.setTypeNameDisplay(obj.optString("TypeNameDisplay"));
-                    inspection.setInspectionNumber(obj.optInt("InspectionNumber"));
-                    inspection.setInspectorName(obj.optString("InspectorName"));
-                    inspection.setPhone(obj.optString("Phone"));
-                    inspection.setInspectionMissed(obj.getInt("InspectionMissed"));
-                    inspection.setCommunityId(obj.optInt("CommunityID"));
-                    inspection.setStreetId(obj.optInt("StreetID"));
-                    inspection.setCity(obj.optString("City"));
-                    vm.insertInspection(inspection);
+                    Inspection i = new Inspection();
+                    i.setInspectionId(obj.optInt("InspectionId"));
+                    i.setInspectionDate(OffsetDateTime.parse(obj.optString("InspectionDate")));
+                    i.setInspectionStatus(obj.optString("InspectionStatus"));
+                    i.setCommunityName(obj.optString("CommunityName"));
+                    i.setStreetNumber(obj.optString("StreetNumber"));
+                    i.setStreetName(obj.optString("StreetName"));
+                    i.setAddressToDisplay(obj.optString("AddressToDisplay"));
+                    i.setAddressToDisplay2(obj.optString("AddressToDisplay2"));
+                    i.setTypeName(obj.optString("TypeName"));
+                    i.setTypeNameDisplay(obj.optString("TypeNameDisplay"));
+                    i.setInspectionNumber(obj.optInt("InspectionNumber"));
+                    i.setInspectorName(obj.optString("InspectorName"));
+                    i.setPhone(obj.optString("Phone"));
+                    i.setInspectionMissed(obj.getInt("InspectionMissed"));
+                    i.setCommunityId(obj.optInt("CommunityID"));
+                    i.setStreetId(obj.optInt("StreetID"));
+                    i.setCity(obj.optString("City"));
+                    vm.insertInspection(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getUpcomingInspections: " + e.getMessage());
                     callback.onFailure("Error in parsing inspection data, please notify support.");
@@ -157,6 +161,56 @@ public class GoAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in getUpcomingInspections: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getNonPassedInspections(NonPassedInspectionsViewModel vm, int builderPersonnelId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_NON_PASSED_INSPECTIONS_URL, builderPersonnelId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    NonPassedInspection i = new NonPassedInspection();
+                    i.setInspectionId(obj.optInt("InspectionId"));
+                    i.setInspectionDate(OffsetDateTime.parse(obj.optString("InspectionDate")));
+                    i.setInspectionStatus(obj.optString("InspectionStatus"));
+                    i.setCommunityName(obj.optString("CommunityName"));
+                    i.setStreetNumber(obj.optString("StreetNumber"));
+                    i.setStreetName(obj.optString("StreetName"));
+                    i.setTypeName(obj.optString("TypeName"));
+                    i.setInspectionNumber(obj.optInt("InspectionNumber"));
+                    i.setInspectionAddress(obj.optString("InspectionAddress"));
+                    i.setItems(obj.optInt("Items"));
+                    i.setDaysOld(obj.optInt("DaysOld"));
+                    i.setInspectedBy(obj.optString("InspectedBy"));
+                    vm.insertInspection(i);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getNonPassedInspections: " + e.getMessage());
+                    callback.onFailure("Error in parsing inspection data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getNonPassedInspections");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getNonPassedInspections");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getNonPassedInspections: " + errorMessage);
                 callback.onFailure("Error! Please contact support");
             }
         }) {

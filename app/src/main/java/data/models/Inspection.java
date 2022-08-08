@@ -81,6 +81,32 @@ public class Inspection implements Parcelable {
         }
     };
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(InspectionId);
+        parcel.writeString(InspectionDate.toString());
+        parcel.writeString(InspectionStatus);
+        parcel.writeString(CommunityName);
+        parcel.writeString(StreetNumber);
+        parcel.writeString(StreetName);
+        parcel.writeString(AddressToDisplay);
+        parcel.writeString(AddressToDisplay2);
+        parcel.writeString(TypeName);
+        parcel.writeString(TypeNameDisplay);
+        parcel.writeInt(InspectionNumber);
+        parcel.writeString(InspectorName);
+        parcel.writeString(Phone);
+        parcel.writeInt(InspectionMissed);
+        parcel.writeInt(CommunityId);
+        parcel.writeInt(StreetId);
+        parcel.writeString(City);
+    }
+
     //region GETTERS AND SETTERS
     public int getInspectionId() {
         return InspectionId;
@@ -201,30 +227,4 @@ public class Inspection implements Parcelable {
         City = city;
     }
     //endregion
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(InspectionId);
-        parcel.writeString(InspectionDate.toString());
-        parcel.writeString(InspectionStatus);
-        parcel.writeString(CommunityName);
-        parcel.writeString(StreetNumber);
-        parcel.writeString(StreetName);
-        parcel.writeString(AddressToDisplay);
-        parcel.writeString(AddressToDisplay2);
-        parcel.writeString(TypeName);
-        parcel.writeString(TypeNameDisplay);
-        parcel.writeInt(InspectionNumber);
-        parcel.writeString(InspectorName);
-        parcel.writeString(Phone);
-        parcel.writeInt(InspectionMissed);
-        parcel.writeInt(CommunityId);
-        parcel.writeInt(StreetId);
-        parcel.writeString(City);
-    }
 }

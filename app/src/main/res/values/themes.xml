@@ -16,4 +16,10 @@
     <style name="orangeButton">
         <item name="android:backgroundTint">@color/burgessOrange</item>
     </style>
+    <style name="NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

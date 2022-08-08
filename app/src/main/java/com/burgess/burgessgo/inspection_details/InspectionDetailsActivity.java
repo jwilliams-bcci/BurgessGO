@@ -9,12 +9,19 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import data.models.Inspection;
 
-public class InspectionDetailsActivity extends AppCompatActivity {
+public class InspectionDetailsActivity extends BaseActivity {
     private static final String TAG = "INSPECTION_DETAILS";
     public static final String INTENT_EXTRA = "INSPECTION";
 
@@ -42,17 +49,10 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
         // Get intent
         Intent intent = getIntent();
-        mInspection = (Inspection) intent.getParcelableExtra(INTENT_EXTRA);
+        mInspection = intent.getParcelableExtra(INTENT_EXTRA);
 
         initializeViews();
         initializeDisplayContent();
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     public void initializeViews() {
@@ -64,10 +64,12 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     }
 
     public void initializeDisplayContent() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
         mTextViewAddress.setText(mInspection.getAddressToDisplay());
         mTextViewInspectionType.setText(mInspection.getTypeName());
         mTextViewStatus.setText(mInspection.getInspectionStatus());
-        mTextViewDate.setText(mInspection.getInspectionDate().toString());
+        mTextViewDate.setText(mInspection.getInspectionDate().toLocalDate().format(formatter));
         mTextViewConsultant.setText(mInspection.getInspectorName());
     }
 }

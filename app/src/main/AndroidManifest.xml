@@ -18,6 +18,45 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestHomeAccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShareTransferHomesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DeactivateHomesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ActivateHomesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OpenDefectsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ScheduleInspectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyHomesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".inspection_defects.InspectionDefectsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".schedule_reinspection.ScheduleReinspectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".non_passed_inspection_details.NonPassedInspectionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".non_passed_inspections.NonPassedInspectionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".inspection_details.InspectionDetailsActivity"
             android:exported="false" />
         <activity
