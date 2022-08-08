@@ -5,7 +5,7 @@
     android:id="@+id/upcoming_inspections_contraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".upcoming_inspections.UpcomingInspections">
+    tools:context=".upcoming_inspections.UpcomingInspectionsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/upcoming_inspections_toolbar"
@@ -19,4 +19,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_main"
         app:title="Upcoming Inspections" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/upcoming_inspections_swipe_refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upcoming_inspections_toolbar">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/upcoming_inspections_recycler_inspections"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/upcoming_inspections_toolbar"
+            tools:listitem="@layout/item_inspection" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
