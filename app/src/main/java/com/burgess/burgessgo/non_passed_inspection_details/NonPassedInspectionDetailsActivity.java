@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
+import com.burgess.burgessgo.inspection_defects.InspectionDefectsActivity;
 import com.burgess.burgessgo.schedule_reinspection.ScheduleReinspectionActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -88,7 +89,9 @@ public class NonPassedInspectionDetailsActivity extends BaseActivity {
         });
 
         mButtonViewDefects.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "View Defects clicked", Snackbar.LENGTH_SHORT).show();
+            Intent i = new Intent(v.getContext(), InspectionDefectsActivity.class);
+            i.putExtra(InspectionDefectsActivity.INTENT_EXTRA, mInspection);
+            v.getContext().startActivity(i);
         });
 
         mButtonEmailSend.setOnClickListener(v -> {

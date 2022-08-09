@@ -1,9 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/inspection_defects_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".inspection_defects.InspectionDefectsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/inspection_defects_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main"
+        app:title="Inspection Defects" />
+
+    <TextView
+        android:id="@+id/inspection_defects_textView_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/inspection_defects_label_inspection_type"
+        app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_address" />
+
+    <TextView
+        android:id="@+id/inspection_defects_textView_inspection_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_textView_address"
+        app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_inspection_type" />
+
+    <TextView
+        android:id="@+id/inspection_defects_textView_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_textView_address"
+        app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_status" />
+
+    <TextView
+        android:id="@+id/inspection_defects_textView_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_textView_address"
+        app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_date" />
+
+    <TextView
+        android:id="@+id/inspection_defects_textView_consultant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_textView_address"
+        app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_consultant" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inspection_defects_recycler_inspection_defect_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_defects_title_defects"
+            tools:listitem="@layout/item_inspection_defect" />
+
+        <TextView
+        android:id="@+id/inspection_defects_label_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Address:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_toolbar" />
+
+    <TextView
+        android:id="@+id/inspection_defects_label_inspection_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Inspection Type:"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_1" />
+
+    <TextView
+        android:id="@+id/inspection_defects_label_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Status:"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_2" />
+
+    <TextView
+        android:id="@+id/inspection_defects_label_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Date:"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_3" />
+
+    <TextView
+        android:id="@+id/inspection_defects_label_consultant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Consultant:"
+        app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_4" />
+
+    <View
+        android:id="@+id/inspection_defects_divider_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_address" />
+
+    <View
+        android:id="@+id/inspection_defects_divider_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_inspection_type" />
+
+    <View
+        android:id="@+id/inspection_defects_divider_3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_status" />
+
+    <View
+        android:id="@+id/inspection_defects_divider_4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_date" />
+
+        <TextView
+            android:id="@+id/inspection_defects_title_defects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Inspection Defects List"
+            app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_consultant" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

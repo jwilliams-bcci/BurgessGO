@@ -20,6 +20,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsViewModel;
 
@@ -33,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import data.models.Inspection;
+import data.models.InspectionDefect;
 import data.models.NonPassedInspection;
 
 public class GoAPIQueue {
@@ -43,6 +45,7 @@ public class GoAPIQueue {
     private static final String LOGIN_URL = "Login?userName=%s&password=%s";
     private static final String GET_UPCOMING_INSPECTIONS_URL = "GetUpcomingInspections?builderPersonnelId=%s";
     private static final String GET_NON_PASSED_INSPECTIONS_URL = "GetNonPassedInspections?builderPersonnelId=%s";
+    private static final String GET_INSPECTION_DEFECTS_URL = "GetInspectionDefects?inspectionId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -213,6 +216,46 @@ public class GoAPIQueue {
                 GoLogger.log('E', TAG, "ERROR in getNonPassedInspections: " + errorMessage);
                 callback.onFailure("Error! Please contact support");
             }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getInspectionDefects(InspectionDefectsViewModel vm, int inspectionId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_INSPECTION_DEFECTS_URL, inspectionId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    InspectionDefect i = new InspectionDefect();
+                    i.setRowId(obj.optInt("RowID"));
+                    i.setLocationId(obj.optInt("LocationID"));
+                    i.setInspectionId(obj.optInt("InspectionId"));
+                    i.setInspectionNumber(obj.optInt("InspectionNumber"));
+                    i.setInspectionDate(OffsetDateTime.parse(obj.optString("InspectionDate")));
+                    i.setDefectCategoryDisplayName(obj.optString("DefectCategoryDisplayName"));
+                    i.setDefectItemDescription(obj.optString("DefectItemDescription"));
+                    i.setDeviationText(obj.optString("DeviationText"));
+                    i.setColumnHeader1(obj.optString("ColumnHeader1"));
+                    i.setColumnHeader2(obj.optString("ColumnHeader2"));
+                    i.setSourceId(obj.optInt("SourceID"));
+                    i.setOrderBy(obj.optInt("OrderBy"));
+                    vm.insertInspectionDefect(i);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + e.getMessage());
+                    callback.onFailure("Error in parsing inspection data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+
         }) {
             @Override
             public Map<String, String> getHeaders() {
