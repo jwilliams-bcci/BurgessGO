@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
+import com.burgess.burgessgo.reschedule_inspection.RescheduleInspectionActivity;
+import com.burgess.burgessgo.schedule_reinspection.ScheduleReinspectionActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +55,7 @@ public class InspectionDetailsActivity extends BaseActivity {
         mInspection = intent.getParcelableExtra(INTENT_EXTRA);
 
         initializeViews();
+        initializeButtons();
         initializeDisplayContent();
     }
 
@@ -61,6 +65,15 @@ public class InspectionDetailsActivity extends BaseActivity {
         mTextViewStatus = findViewById(R.id.inspection_details_textView_status);
         mTextViewDate = findViewById(R.id.inspection_details_textView_date);
         mTextViewConsultant = findViewById(R.id.inspection_details_textView_consultant);
+        mButtonReschedule = findViewById(R.id.inspection_details_button_reschedule);
+    }
+
+    public void initializeButtons() {
+        mButtonReschedule.setOnClickListener(v -> {
+            Intent i = new Intent(v.getContext(), RescheduleInspectionActivity.class);
+            i.putExtra(RescheduleInspectionActivity.INTENT_EXTRA, mInspection);
+            v.getContext().startActivity(i);
+        });
     }
 
     public void initializeDisplayContent() {

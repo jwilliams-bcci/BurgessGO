@@ -82,7 +82,6 @@ public class NonPassedInspectionDetailsActivity extends BaseActivity {
         });
 
         mButtonReinspect.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Reinspect clicked", Snackbar.LENGTH_SHORT).show();
             Intent i = new Intent(v.getContext(), ScheduleReinspectionActivity.class);
             i.putExtra(ScheduleReinspectionActivity.INTENT_EXTRA, mInspection);
             v.getContext().startActivity(i);

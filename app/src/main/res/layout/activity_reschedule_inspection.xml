@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reschedule_inspection_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".reschedule_inspection.RescheduleInspectionActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/reschedule_inspection_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main"
+        app:title="Reschedule Inspection" />
+
+    <EditText
+        android:id="@+id/reschedule_inspection_textView_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:inputType="none"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <EditText
+        android:id="@+id/reschedule_inspection_textView_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintStart_toStartOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_textView_address" />
+
+    <EditText
+        android:id="@+id/reschedule_inspection_textView_inspection_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="none|textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_textView_date" />
+
+    <EditText
+        android:id="@+id/reschedule_inspection_textView_po_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="PO Number"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintStart_toStartOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_textView_inspection_type" />
+
+    <EditText
+        android:id="@+id/reschedule_inspection_textView_notes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Notes"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintStart_toStartOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_textView_po_number" />
+
+    <Button
+        android:id="@+id/reschedule_inspection_button_reschedule"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Reschedule"
+        app:layout_constraintEnd_toEndOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintStart_toStartOf="@+id/reschedule_inspection_textView_address"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_textView_notes" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Reschedule Inspection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reschedule_inspection_toolbar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
