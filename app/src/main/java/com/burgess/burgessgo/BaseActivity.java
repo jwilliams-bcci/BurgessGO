@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.burgess.burgessgo.my_homes.MyHomesActivity;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsActivity;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 
@@ -31,7 +32,8 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.menuItem_myHomes:
-                Toast.makeText(this, "Clicked My Homes", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, MyHomesActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_activateHomes:
                 Toast.makeText(this, "Clicked Activate Homes", Toast.LENGTH_SHORT).show();

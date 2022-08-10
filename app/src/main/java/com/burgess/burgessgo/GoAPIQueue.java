@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import data.models.ActiveLocation;
 import data.models.Inspection;
 import data.models.InspectionDefect;
 import data.models.NonPassedInspection;
@@ -283,7 +284,24 @@ public class GoAPIQueue {
         url += String.format(GET_ACTIVE_LOCATIONS_BY_SUPER_URL, builderPersonnelId, sourceId);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    ActiveLocation i = new ActiveLocation();
+                    i.setLocationId(obj.optInt("LocationID"));
+                    i.setCommunity(obj.optString("Community"));
+                    i.setAddress(obj.optString("Address"));
+                    i.setInspectionCount(obj.optInt("InspectionCount"));
+                    i.setInspectionCountRemaining(obj.optInt("InspectionCountRemaining"));
+                    i.setStreetName(obj.optString("StreetName"));
+                    i.setMAXBuilderPersonnelIDRequestingAccess(obj.optInt("MAXBuilderPersonnelIDRequestingAccess"));
+                    vm.insertActiveLocation(i);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + e.getMessage());
+                    callback.onFailure("Error in parsing inspection data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
                 GoLogger.log('E', TAG, "Lost connection in getActiveLocationsBySuper");
