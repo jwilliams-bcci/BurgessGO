@@ -20,6 +20,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.burgess.burgessgo.add_new_address.AddNewAddressViewModel;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
 import com.burgess.burgessgo.my_homes.MyHomesViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
@@ -35,9 +36,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import data.models.ActiveLocation;
+import data.models.Community;
 import data.models.Inspection;
 import data.models.InspectionDefect;
 import data.models.NonPassedInspection;
+import data.models.Street;
 
 public class GoAPIQueue {
     private static final String TAG = "GO_API";
@@ -48,7 +51,12 @@ public class GoAPIQueue {
     private static final String GET_UPCOMING_INSPECTIONS_URL = "GetUpcomingInspections?builderPersonnelId=%s";
     private static final String GET_NON_PASSED_INSPECTIONS_URL = "GetNonPassedInspections?builderPersonnelId=%s";
     private static final String GET_INSPECTION_DEFECTS_URL = "GetInspectionDefects?inspectionId=%s";
-    private static final String GET_ACTIVE_LOCATIONS_BY_SUPER_URL = "GetActiveLocationsBySuper?builderPersonnelId=%s&sourceId=%s";
+    private static final String GET_ACTIVE_LOCATIONS_BY_SUPER_URL = "GetActiveLocationsBySuper?builderPersonnelId=%s&source=%s";
+    private static final String GET_COMMUNITY_LIST_URL = "GetCommunityList?builderId=%s&userId=%s&source=%s";
+    private static final String GET_STATE_LIST_URL = "GetStateList?builderId=%s&userId=%s&source=%s";
+    private static final String GET_CITY_LIST_URL = "GetCityList?builderId=%s";
+    private static final String GET_COUNTY_LIST_URL = "GetCountyList?builderId=%s&userId=%s&source=%s";
+    private static final String GET_STREET_LIST_URL = "GetStreetList?builderId=%s&communityId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -123,7 +131,6 @@ public class GoAPIQueue {
         });
         return request;
     }
-
     public JsonArrayRequest getUpcomingInspections(UpcomingInspectionsViewModel vm, int builderPersonnelId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_UPCOMING_INSPECTIONS_URL, builderPersonnelId);
@@ -153,7 +160,7 @@ public class GoAPIQueue {
                     vm.insertInspection(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getUpcomingInspections: " + e.getMessage());
-                    callback.onFailure("Error in parsing inspection data, please notify support.");
+                    callback.onFailure("Error in parsing upcoming inspection data, please notify support.");
                 }
             }
             callback.onSuccess("Success");
@@ -173,7 +180,7 @@ public class GoAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
                 return params;
             }
         };
@@ -203,7 +210,7 @@ public class GoAPIQueue {
                     vm.insertInspection(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getNonPassedInspections: " + e.getMessage());
-                    callback.onFailure("Error in parsing inspection data, please notify support");
+                    callback.onFailure("Error in parsing non passed inspection data, please notify support");
                 }
             }
             callback.onSuccess("Success");
@@ -223,7 +230,7 @@ public class GoAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
                 return params;
             }
         };
@@ -253,7 +260,7 @@ public class GoAPIQueue {
                     vm.insertInspectionDefect(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + e.getMessage());
-                    callback.onFailure("Error in parsing inspection data, please notify support");
+                    callback.onFailure("Error in parsing inspection defect data, please notify support");
                 }
             }
             callback.onSuccess("Success");
@@ -273,15 +280,15 @@ public class GoAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
                 return params;
             }
         };
         return request;
     }
-    public JsonArrayRequest getActiveLocationsBySuper(MyHomesViewModel vm, int builderPersonnelId, int sourceId, final ServerCallback callback) {
+    public JsonArrayRequest getActiveLocationsBySuper(MyHomesViewModel vm, int builderPersonnelId, String source, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_ACTIVE_LOCATIONS_BY_SUPER_URL, builderPersonnelId, sourceId);
+        url += String.format(GET_ACTIVE_LOCATIONS_BY_SUPER_URL, builderPersonnelId, source);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
@@ -298,7 +305,7 @@ public class GoAPIQueue {
                     vm.insertActiveLocation(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + e.getMessage());
-                    callback.onFailure("Error in parsing inspection data, please notify support");
+                    callback.onFailure("Error in parsing active location data, please notify support");
                 }
             }
             callback.onSuccess("Success");
@@ -318,7 +325,208 @@ public class GoAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getCommunityList(AddNewAddressViewModel vm, int builderId, Integer userId, String source, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_COMMUNITY_LIST_URL, builderId, userId, source);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    Community community = new Community();
+                    community.setCommunityId(obj.optInt("CommunityID"));
+                    community.setAreaId(obj.optInt("AreaID"));
+                    community.setCommunityName(obj.optString("CommunityName"));
+                    community.setCityId1(obj.optInt("CityID1"));
+                    community.setCityName1(obj.optString("CityName1"));
+                    community.setCityId2(obj.optInt("CityID2"));
+                    community.setCityName2(obj.optString("CityName2"));
+                    community.setState(obj.optString("State"));
+                    community.setAdditional(obj.optString("Additional"));
+                    community.setAreaName(obj.optString("AreaName"));
+                    vm.insertCommunity(community);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getCommunityList: " + e.getMessage());
+                    callback.onFailure("Error in parsing community data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getCommunityList");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getCommunityList");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getCommunityList: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getStateList(AddNewAddressViewModel vm, int builderId, Integer userId, String source, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_STATE_LIST_URL, builderId, userId, source);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    vm.insertState(obj.optString("InspectionState"));
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getStateList: " + e.getMessage());
+                    callback.onFailure("Error in parsing state data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getStateList");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getStateList");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getStateList: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getCityList(AddNewAddressViewModel vm, int builderId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_CITY_LIST_URL, builderId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    vm.insertCity(obj.optString("City"));
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getCityList: " + e.getMessage());
+                    callback.onFailure("Error in parsing city data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getCityList");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getCityList");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getCityList: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getCountyList(AddNewAddressViewModel vm, int builderId, Integer userId, String source, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_COUNTY_LIST_URL, builderId, userId, source);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    vm.insertCounty(obj.optString("CountyName"));
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getCountyList: " + e.getMessage());
+                    callback.onFailure("Error in parsing county data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getCountyList");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getCountyList");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getCountyList: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getStreetList(AddNewAddressViewModel vm, int builderId, int communityId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_STREET_LIST_URL, builderId, communityId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    Street street = new Street();
+                    street.setStreetNameIdMax(obj.optInt("StreetNameIDMax"));
+                    street.setStreetName(obj.optString("StreetName"));
+                    street.setCommunityId(obj.optInt("CommunityID"));
+                    street.setCityId(obj.optInt("CityID"));
+                    vm.insertStreet(street);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getStreetList: " + e.getMessage());
+                    callback.onFailure("Error in parsing street data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getStreetList");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getStreetList");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getStreetList: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
                 return params;
             }
         };

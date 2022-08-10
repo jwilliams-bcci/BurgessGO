@@ -2,7 +2,6 @@ package com.burgess.burgessgo.inspection_defects;
 
 import static com.burgess.burgessgo.Constants.PREF;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +22,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.time.format.DateTimeFormatter;
 
-import data.models.Inspection;
 import data.models.NonPassedInspection;
 
 public class InspectionDefectsActivity extends BaseActivity {

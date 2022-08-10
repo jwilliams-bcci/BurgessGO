@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
+import com.burgess.burgessgo.add_new_address.AddNewAddressActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MyHomesActivity extends BaseActivity {
@@ -68,7 +70,8 @@ public class MyHomesActivity extends BaseActivity {
 
     public void initializeButtons() {
         mButtonAddNewAddress.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Clicked Add New Address", Snackbar.LENGTH_SHORT).show();
+            Intent intent = new Intent(v.getContext(), AddNewAddressActivity.class);
+            v.getContext().startActivity(intent);
         });
     }
 
@@ -84,7 +87,7 @@ public class MyHomesActivity extends BaseActivity {
 
     public void updateMyHomesList() {
         mViewModel.clearActiveLocationList();
-        apiQueue.getRequestQueue().add(apiQueue.getActiveLocationsBySuper(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), 0, new ServerCallback() {
+        apiQueue.getRequestQueue().add(apiQueue.getActiveLocationsBySuper(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), null, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 mListAdapter.notifyDataSetChanged();
@@ -93,7 +96,7 @@ public class MyHomesActivity extends BaseActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
             }
         }));
     }
