@@ -21,6 +21,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
+import com.burgess.burgessgo.my_homes.MyHomesViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsViewModel;
 
@@ -46,6 +47,7 @@ public class GoAPIQueue {
     private static final String GET_UPCOMING_INSPECTIONS_URL = "GetUpcomingInspections?builderPersonnelId=%s";
     private static final String GET_NON_PASSED_INSPECTIONS_URL = "GetNonPassedInspections?builderPersonnelId=%s";
     private static final String GET_INSPECTION_DEFECTS_URL = "GetInspectionDefects?inspectionId=%s";
+    private static final String GET_ACTIVE_LOCATIONS_BY_SUPER_URL = "GetActiveLocationsBySuper?builderPersonnelId=%s&sourceId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -255,7 +257,45 @@ public class GoAPIQueue {
             }
             callback.onSuccess("Success");
         }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getInspectionDefects");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getInspectionDefects");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getActiveLocationsBySuper(MyHomesViewModel vm, int builderPersonnelId, int sourceId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_ACTIVE_LOCATIONS_BY_SUPER_URL, builderPersonnelId, sourceId);
 
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getActiveLocationsBySuper");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getActiveLocationsBySuper");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getActiveLocationsBySuper: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
         }) {
             @Override
             public Map<String, String> getHeaders() {

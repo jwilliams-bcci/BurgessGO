@@ -45,7 +45,7 @@
             android:name=".ScheduleInspectionActivity"
             android:exported="false" />
         <activity
-            android:name=".MyHomesActivity"
+            android:name=".my_homes.MyHomesActivity"
             android:exported="false" />
         <activity
             android:name=".inspection_defects.InspectionDefectsActivity"
