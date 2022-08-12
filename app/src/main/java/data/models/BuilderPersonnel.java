@@ -3,6 +3,8 @@ package data.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class BuilderPersonnel implements Parcelable {
     private int BuilderPersonnelId;
     private String PersonnelName;
@@ -52,6 +54,12 @@ public class BuilderPersonnel implements Parcelable {
         parcel.writeString(Initials);
         parcel.writeString(Address1);
         parcel.writeString(Address2);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return PersonnelName;
     }
 
     //region GETTERS AND SETTERS

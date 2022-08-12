@@ -1,6 +1,7 @@
 package com.burgess.burgessgo.share_transfer_homes;
 
 import static com.burgess.burgessgo.Constants.PREF;
+import static com.burgess.burgessgo.Constants.PREF_BUILDER_ID;
 import static com.burgess.burgessgo.Constants.PREF_BUILDER_PERSONNEL_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,8 +62,6 @@ public class ShareTransferHomesActivity extends BaseActivity {
     }
 
     public void initializeDisplayContent() {
-        mListAdapter = new ShareTransferHomesListAdapter(new ShareTransferHomesListAdapter.InspectDiff());
-        mRecyclerHomeList.setAdapter(mListAdapter);
         mRecyclerHomeList.setLayoutManager(new LinearLayoutManager(this));
         updateHomeList();
     }
@@ -72,8 +71,9 @@ public class ShareTransferHomesActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                mListAdapter = new ShareTransferHomesListAdapter(mViewModel.getActiveHomeList(), apiQueue, mViewModel, mSharedPreferences.getInt(PREF_BUILDER_ID, -1));
+                mRecyclerHomeList.setAdapter(mListAdapter);
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getActiveHomeList());
             }
 
             @Override

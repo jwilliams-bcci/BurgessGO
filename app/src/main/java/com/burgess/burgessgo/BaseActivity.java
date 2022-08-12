@@ -11,6 +11,7 @@ import com.burgess.burgessgo.activate_homes.ActivateHomesActivity;
 import com.burgess.burgessgo.deactivate_homes.DeactivateHomesActivity;
 import com.burgess.burgessgo.my_homes.MyHomesActivity;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsActivity;
+import com.burgess.burgessgo.request_home_access.RequestHomeAccessActivity;
 import com.burgess.burgessgo.share_transfer_homes.ShareTransferHomesActivity;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 
@@ -51,7 +52,8 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.menuItem_requestHome:
-                Toast.makeText(this, "Clicked Request Homes", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, RequestHomeAccessActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_help:
                 Toast.makeText(this, "Clicked Help", Toast.LENGTH_SHORT).show();

@@ -78,8 +78,6 @@ public class MyHomesActivity extends BaseActivity {
     public void initializeDisplayContent() {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mDividerItemDecoration = new DividerItemDecoration(mRecyclerMyHomesList.getContext(), mLinearLayoutManager.getOrientation());
-        mListAdapter = new MyHomesListAdapter(new MyHomesListAdapter.InspectDiff());
-        mRecyclerMyHomesList.setAdapter(mListAdapter);
         mRecyclerMyHomesList.setLayoutManager(mLinearLayoutManager);
         mRecyclerMyHomesList.addItemDecoration(mDividerItemDecoration);
         updateMyHomesList();
@@ -90,8 +88,9 @@ public class MyHomesActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getActiveLocationsBySuper(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), null, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                mListAdapter = new MyHomesListAdapter(mViewModel.getActiveLocationList(), apiQueue, mViewModel);
+                mRecyclerMyHomesList.setAdapter(mListAdapter);
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getActiveLocationList());
             }
 
             @Override

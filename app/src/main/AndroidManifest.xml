@@ -42,7 +42,7 @@
             android:name=".activate_homes.ActivateHomesActivity"
             android:exported="false" />
         <activity
-            android:name=".OpenDefectsActivity"
+            android:name=".LocationDefectsActivity"
             android:exported="false" />
         <activity
             android:name=".ScheduleInspectionActivity"

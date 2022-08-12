@@ -28,6 +28,7 @@ import com.burgess.burgessgo.deactivate_homes.DeactivateHomesViewModel;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
 import com.burgess.burgessgo.my_homes.MyHomesViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
+import com.burgess.burgessgo.request_home_access.RequestHomeAccessViewModel;
 import com.burgess.burgessgo.share_transfer_homes.ShareTransferHomesViewModel;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsViewModel;
 
@@ -66,6 +67,8 @@ public class GoAPIQueue {
     private static final String GET_HOMES_FOR_ACTIVATION_URL = "GetHomesForActivation?builderPersonnelId=%s";
     private static final String GET_HOMES_FOR_DEACTIVATION_URL = "GetHomesForDeactivation?builderPersonnelId=%s";
     private static final String GET_BUILDER_PERSONNEL_URL = "GetBuilderPersonnel?builderId=%s&locationId=%s";
+    private static final String GET_INSPECTIONS_AT_LOCATION_URL = "GetInspectionsAtLocation?locationId=%s";
+    private static final String GET_OPEN_DEFECTS_AT_LOCATION_URL = "GetOpenDefectsAtLocation?locationId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -597,18 +600,9 @@ public class GoAPIQueue {
                     if (vm instanceof DeactivateHomesViewModel) {
                         ((DeactivateHomesViewModel) vm).insertActiveHome(i);
                     } else if (vm instanceof ShareTransferHomesViewModel) {
-                        getRequestQueue().add(getBuilderPersonnel(vm, mSharedPreferences.getInt(PREF_BUILDER_ID, -1), i.getLocationId(), new ServerCallback() {
-                            @Override
-                            public void onSuccess(String message) {
-                                i.setBuilderPersonnelList(((ShareTransferHomesViewModel) vm).getBuilderPersonnelList());
-                                ((ShareTransferHomesViewModel) vm).insertActiveHome(i);
-                                ((ShareTransferHomesViewModel) vm).clearBuilderPersonnelList();
-                            }
-
-                            @Override
-                            public void onFailure(String message) {
-                            }
-                        }));
+                        ((ShareTransferHomesViewModel) vm).insertActiveHome(i);
+                    } else if (vm instanceof RequestHomeAccessViewModel) {
+                        ((RequestHomeAccessViewModel) vm).insertActiveHome(i);
                     }
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getActiveHomes: " + e.getMessage());
@@ -654,6 +648,8 @@ public class GoAPIQueue {
                     i.setAddress2(obj.optString("Address2"));
                     if (vm instanceof ShareTransferHomesViewModel) {
                         ((ShareTransferHomesViewModel) vm).insertBuilderPersonnel(i);
+                    } else if (vm instanceof RequestHomeAccessViewModel) {
+                        ((RequestHomeAccessViewModel) vm).insertBuilderPersonnel(i);
                     }
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getBuilderPersonnel: " + e.getMessage());

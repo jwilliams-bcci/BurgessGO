@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.R;
@@ -23,13 +24,14 @@ import data.models.BuilderPersonnel;
 import data.models.Home;
 
 public class ShareTransferHomesViewHolder extends RecyclerView.ViewHolder {
+    private final ConstraintLayout mConstraintLayoutUpper;
+    private final ConstraintLayout mConstraintLayoutLower;
     private final TextView mTextViewCommunity;
     private final TextView mTextViewAddress;
     private final ImageView mImageViewArrow;
     private final Spinner mSpinnerBuilderPersonnel;
     private final Button mButtonShare;
     private final Button mButtonTransfer;
-    private ArrayAdapter<BuilderPersonnel> mSpinnerBuilderPersonnelAdapter;
 
     public ShareTransferHomesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -39,37 +41,42 @@ public class ShareTransferHomesViewHolder extends RecyclerView.ViewHolder {
         mSpinnerBuilderPersonnel = itemView.findViewById(R.id.item_share_transfer_home_spinner_builder_personnel);
         mButtonShare = itemView.findViewById(R.id.item_share_transfer_home_button_share);
         mButtonTransfer = itemView.findViewById(R.id.item_share_transfer_home_button_transfer);
+        mConstraintLayoutUpper = itemView.findViewById(R.id.item_share_transfer_home_constraint_layout_upper);
+        mConstraintLayoutLower = itemView.findViewById(R.id.item_share_transfer_home_constraint_layout_lower);
     }
 
-    public void bind(Home home) {
-        mTextViewCommunity.setText(home.getCommunity());
-        mTextViewAddress.setText(home.getAddress());
-
-        mSpinnerBuilderPersonnelAdapter = new ArrayAdapter<>(mTextViewAddress.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, home.getBuilderPersonnelList());
-        mSpinnerBuilderPersonnel.setAdapter(mSpinnerBuilderPersonnelAdapter);
-        mSpinnerBuilderPersonnel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                BuilderPersonnel builderPersonnel = (BuilderPersonnel) adapterView.getSelectedItem();
-                Toast.makeText(mTextViewAddress.getContext(), "Clicked " + builderPersonnel.getPersonnelName() + ", ID: " + builderPersonnel.getBuilderPersonnelId(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mButtonShare.setOnClickListener(v -> {
-            Toast.makeText(mTextViewAddress.getContext(), "Clicked Share for " + home.getLocationId(), Toast.LENGTH_SHORT).show();
-        });
-        mButtonTransfer.setOnClickListener(v -> {
-            Toast.makeText(mTextViewAddress.getContext(), "Clicked Transfer for " + home.getLocationId(), Toast.LENGTH_SHORT).show();
-        });
+    //region GETTERS
+    public TextView getTextViewCommunity() {
+        return mTextViewCommunity;
     }
 
-    public static ShareTransferHomesViewHolder create(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_share_transfer_home, parent, false);
-        return new ShareTransferHomesViewHolder(view);
+    public TextView getTextViewAddress() {
+        return mTextViewAddress;
     }
+
+    public ConstraintLayout getConstraintLayoutUpper() {
+        return mConstraintLayoutUpper;
+    }
+
+    public ConstraintLayout getConstraintLayoutLower() {
+        return mConstraintLayoutLower;
+    }
+
+    public Button getButtonShare() {
+        return mButtonShare;
+    }
+
+    public Button getButtonTransfer() {
+        return mButtonTransfer;
+    }
+
+    public Spinner getSpinnerBuilderPersonnel() {
+        return mSpinnerBuilderPersonnel;
+    }
+
+    public ImageView getImageViewArrow() {
+        return mImageViewArrow;
+    }
+
+    //endregion
 }
