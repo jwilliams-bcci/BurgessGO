@@ -2,8 +2,46 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deactivate_homes_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DeactivateHomesActivity">
+    tools:context=".deactivate_homes.DeactivateHomesActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/deactivate_homes_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main"
+        app:title="Deactivate Homes" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/deactivate_homes_recycler_active_home_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deactivate_homes_toolbar"
+        tools:listitem="@layout/item_home" />
+
+    <Button
+        android:id="@+id/deactivate_homes_button_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deactivate_homes_recycler_active_home_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

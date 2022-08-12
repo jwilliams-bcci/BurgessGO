@@ -30,16 +30,16 @@
             android:name=".HelpActivity"
             android:exported="false" />
         <activity
-            android:name=".RequestHomeAccessActivity"
+            android:name=".request_home_access.RequestHomeAccessActivity"
             android:exported="false" />
         <activity
-            android:name=".ShareTransferHomesActivity"
+            android:name=".share_transfer_homes.ShareTransferHomesActivity"
             android:exported="false" />
         <activity
-            android:name=".DeactivateHomesActivity"
+            android:name=".deactivate_homes.DeactivateHomesActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivateHomesActivity"
+            android:name=".activate_homes.ActivateHomesActivity"
             android:exported="false" />
         <activity
             android:name=".OpenDefectsActivity"

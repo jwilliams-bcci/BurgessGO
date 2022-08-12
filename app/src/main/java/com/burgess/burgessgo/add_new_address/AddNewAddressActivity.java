@@ -155,6 +155,7 @@ public class AddNewAddressActivity extends AppCompatActivity {
                     mTextViewSquareFootage.setVisibility(View.VISIBLE);
                     mTextViewPlanNumber.setVisibility(View.VISIBLE);
                     mTextViewJobNumber.setVisibility(View.VISIBLE);
+                    mButtonSubmit.setVisibility(View.VISIBLE);
 
                     mSpinnerState.setVisibility(View.VISIBLE);
                     mSpinnerState.setSelection(0, false);
@@ -169,6 +170,20 @@ public class AddNewAddressActivity extends AppCompatActivity {
                 else if (i != 0) {
                     Community selectedCommunity = (Community) adapterView.getSelectedItem();
                     Snackbar.make(mConstraintLayout, selectedCommunity.getCommunityName() + ", ID: " + selectedCommunity.getCommunityId(), Snackbar.LENGTH_SHORT).show();
+
+                    mSpinnerState.setVisibility(View.GONE);
+                    mSpinnerCity.setVisibility(View.GONE);
+                    mSpinnerCounty.setVisibility(View.GONE);
+                    mTextViewNewCommunityName.setVisibility(View.GONE);
+                    mTextViewNewStreetName.setVisibility(View.GONE);
+                    mTextViewHouseNumber.setVisibility(View.GONE);
+                    mTextViewCityName.setVisibility(View.GONE);
+                    mTextViewCountyName.setVisibility(View.GONE);
+                    mTextViewPermitNumber.setVisibility(View.GONE);
+                    mTextViewSquareFootage.setVisibility(View.GONE);
+                    mTextViewPlanNumber.setVisibility(View.GONE);
+                    mTextViewJobNumber.setVisibility(View.GONE);
+                    mButtonSubmit.setVisibility(View.GONE);
 
                     mSpinnerStreet.setVisibility(View.VISIBLE);
                     mSpinnerStreet.setSelection(0, false);
@@ -186,17 +201,108 @@ public class AddNewAddressActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == mViewModel.getStreetList().size() - 2) {
                     Snackbar.make(mConstraintLayout, "Not a valid street selection, please try again", Snackbar.LENGTH_SHORT).show();
-                } else if (i == mViewModel.getStreetList().size() - 1) {
+
+                    mSpinnerState.setVisibility(View.GONE);
+                    mSpinnerCity.setVisibility(View.GONE);
+                    mSpinnerCounty.setVisibility(View.GONE);
+                    mTextViewNewCommunityName.setVisibility(View.GONE);
+                    mTextViewNewStreetName.setVisibility(View.GONE);
+                    mTextViewHouseNumber.setVisibility(View.GONE);
+                    mTextViewCityName.setVisibility(View.GONE);
+                    mTextViewCountyName.setVisibility(View.GONE);
+                    mTextViewPermitNumber.setVisibility(View.GONE);
+                    mTextViewSquareFootage.setVisibility(View.GONE);
+                    mTextViewPlanNumber.setVisibility(View.GONE);
+                    mTextViewJobNumber.setVisibility(View.GONE);
+                    mButtonSubmit.setVisibility(View.GONE);
+                }
+                else if (i == mViewModel.getStreetList().size() - 1) {
                     Snackbar.make(mConstraintLayout, "Creating a new street...", Snackbar.LENGTH_SHORT).show();
-                } else if (i != 0) {
-                    Street selectedStreet = (Street) adapterView.getSelectedItem();
-                    Snackbar.make(mConstraintLayout, selectedStreet.getStreetName() + ", ID: " + selectedStreet.getStreetNameIdMax(), Snackbar.LENGTH_SHORT).show();
+
+                    mSpinnerState.setVisibility(View.GONE);
+                    mSpinnerCity.setVisibility(View.GONE);
+                    mSpinnerCounty.setVisibility(View.GONE);
+                    mTextViewNewCommunityName.setVisibility(View.GONE);
+
+                    mTextViewNewStreetName.setVisibility(View.VISIBLE);
                     mTextViewHouseNumber.setVisibility(View.VISIBLE);
                     mTextViewPermitNumber.setVisibility(View.VISIBLE);
                     mTextViewSquareFootage.setVisibility(View.VISIBLE);
                     mTextViewPlanNumber.setVisibility(View.VISIBLE);
                     mTextViewJobNumber.setVisibility(View.VISIBLE);
                     mButtonSubmit.setVisibility(View.VISIBLE);
+                }
+                else if (i != 0) {
+                    Street selectedStreet = (Street) adapterView.getSelectedItem();
+                    Snackbar.make(mConstraintLayout, selectedStreet.getStreetName() + ", ID: " + selectedStreet.getStreetNameIdMax(), Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewNewStreetName.setVisibility(View.GONE);
+
+                    mTextViewHouseNumber.setVisibility(View.VISIBLE);
+                    mTextViewPermitNumber.setVisibility(View.VISIBLE);
+                    mTextViewSquareFootage.setVisibility(View.VISIBLE);
+                    mTextViewPlanNumber.setVisibility(View.VISIBLE);
+                    mTextViewJobNumber.setVisibility(View.VISIBLE);
+                    mButtonSubmit.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        mSpinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    Snackbar.make(mConstraintLayout, adapterView.getSelectedItem().toString() + " selected", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        mSpinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == mViewModel.getCityList().size() - 2) {
+                    Snackbar.make(mConstraintLayout, "Not a valid city selection, please try again", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCityName.setVisibility(View.GONE);
+                } else if (i == mViewModel.getCityList().size() - 1) {
+                    Snackbar.make(mConstraintLayout, "Creating a new city...", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCityName.setVisibility(View.VISIBLE);
+                } else if (i != 0) {
+                    Snackbar.make(mConstraintLayout, adapterView.getSelectedItem().toString() + " selected", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCityName.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        mSpinnerCounty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == mViewModel.getCountyList().size() - 2) {
+                    Snackbar.make(mConstraintLayout, "Not a valid county selection, please try again", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCountyName.setVisibility(View.GONE);
+                } else if (i == mViewModel.getCountyList().size() - 1) {
+                    Snackbar.make(mConstraintLayout, "Creating a new county...", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCountyName.setVisibility(View.VISIBLE);
+                } else if (i != 0) {
+                    Snackbar.make(mConstraintLayout, adapterView.getSelectedItem().toString() + " selected", Snackbar.LENGTH_SHORT).show();
+
+                    mTextViewCountyName.setVisibility(View.GONE);
                 }
             }
 

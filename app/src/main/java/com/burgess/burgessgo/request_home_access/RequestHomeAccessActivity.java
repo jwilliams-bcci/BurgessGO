@@ -1,10 +1,13 @@
-package com.burgess.burgessgo;
+package com.burgess.burgessgo.request_home_access;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class RequestHomeAccessActivity extends AppCompatActivity {
+import com.burgess.burgessgo.BaseActivity;
+import com.burgess.burgessgo.R;
+
+public class RequestHomeAccessActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

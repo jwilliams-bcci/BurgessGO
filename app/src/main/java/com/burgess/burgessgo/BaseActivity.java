@@ -7,8 +7,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.burgess.burgessgo.activate_homes.ActivateHomesActivity;
+import com.burgess.burgessgo.deactivate_homes.DeactivateHomesActivity;
 import com.burgess.burgessgo.my_homes.MyHomesActivity;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsActivity;
+import com.burgess.burgessgo.share_transfer_homes.ShareTransferHomesActivity;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 
 public class BaseActivity extends AppCompatActivity {
@@ -36,13 +39,16 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.menuItem_activateHomes:
-                Toast.makeText(this, "Clicked Activate Homes", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ActivateHomesActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_deactivateHomes:
-                Toast.makeText(this, "Clicked Deactivate Homes", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, DeactivateHomesActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_shareHomes:
-                Toast.makeText(this, "Clicked Share/Transfer Homes", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ShareTransferHomesActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_requestHome:
                 Toast.makeText(this, "Clicked Request Homes", Toast.LENGTH_SHORT).show();

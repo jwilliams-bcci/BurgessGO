@@ -19,7 +19,7 @@
         android:title="Deactivate Homes" />
     <item
         android:id="@+id/menuItem_shareHomes"
-        android:title="Share Homes" />
+        android:title="Share/Transfer Homes" />
     <item
         android:id="@+id/menuItem_requestHome"
         android:title="Request Home Access" />
