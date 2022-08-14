@@ -1,14 +1,16 @@
-package com.burgess.burgessgo;
+package com.burgess.burgessgo.help;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ScheduleInspectionActivity extends AppCompatActivity {
+import com.burgess.burgessgo.R;
+
+public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule_inspection);
+        setContentView(R.layout.activity_help);
     }
 }

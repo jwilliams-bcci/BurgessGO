@@ -27,7 +27,7 @@
             android:name=".ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".HelpActivity"
+            android:name=".help.HelpActivity"
             android:exported="false" />
         <activity
             android:name=".request_home_access.RequestHomeAccessActivity"
@@ -42,10 +42,10 @@
             android:name=".activate_homes.ActivateHomesActivity"
             android:exported="false" />
         <activity
-            android:name=".LocationDefectsActivity"
+            android:name=".location_defects.LocationDefectsActivity"
             android:exported="false" />
         <activity
-            android:name=".ScheduleInspectionActivity"
+            android:name=".schedule_inspection.ScheduleInspectionActivity"
             android:exported="false" />
         <activity
             android:name=".my_homes.MyHomesActivity"

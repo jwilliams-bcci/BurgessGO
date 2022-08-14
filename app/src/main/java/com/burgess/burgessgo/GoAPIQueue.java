@@ -26,6 +26,7 @@ import com.burgess.burgessgo.activate_homes.ActivateHomesViewModel;
 import com.burgess.burgessgo.add_new_address.AddNewAddressViewModel;
 import com.burgess.burgessgo.deactivate_homes.DeactivateHomesViewModel;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
+import com.burgess.burgessgo.location_defects.LocationDefectsViewModel;
 import com.burgess.burgessgo.my_homes.MyHomesViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.request_home_access.RequestHomeAccessViewModel;
@@ -674,6 +675,91 @@ public class GoAPIQueue {
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
                 params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getInspectionsAtLocation(MyHomesViewModel vm, int locationId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_INSPECTIONS_AT_LOCATION_URL, locationId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    Inspection i = new Inspection();
+                    i.setInspectionId(obj.optInt("InspectionId"));
+                    i.setInspectionDate(OffsetDateTime.parse(obj.optString("InspectionDate")));
+                    i.setTypeName(obj.optString("InspectionType"));
+                    i.setResolution(obj.optString("Resolution"));
+                    vm.insertInspection(i);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getInspectionsAtLocation: " + e.getMessage());
+                    callback.onFailure("Error in parsing inspection data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getInspectionsAtLocation");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getInspectionsAtLocation");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getInspectionsAtLocation: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getDefectsAtLocation(LocationDefectsViewModel vm, int locationId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_OPEN_DEFECTS_AT_LOCATION_URL, locationId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    InspectionDefect i = new InspectionDefect();
+                    i.setRowId(obj.optInt("RowID"));
+                    i.setDefectCategoryDisplayName(obj.optString("DefectCategoryDisplayName"));
+                    i.setDefectItemDescription(obj.optString("DefectItemDescription"));
+                    i.setDeviationText(obj.optString("DeviationText"));
+                    i.setColumnHeader1(obj.optString("ColumnHeader1"));
+                    i.setColumnHeader2(obj.optString("ColumnHeader2"));
+                    vm.insertInspectionDefect(i);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getDefectsAtLocation: " + e.getMessage());
+                    callback.onFailure("Error in parsing defect data, please notify support");
+                }
+            }
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getDefectsAtLocation");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getDefectsAtLocation");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getDefectsAtLocation: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
                 return params;
             }
         };

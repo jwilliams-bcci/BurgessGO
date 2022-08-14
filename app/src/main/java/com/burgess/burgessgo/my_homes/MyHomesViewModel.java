@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.models.ActiveLocation;
+import data.models.Inspection;
 
 public class MyHomesViewModel extends AndroidViewModel {
     private List<ActiveLocation> activeLocationList = new ArrayList<>();
+    private List<Inspection> inspectionList = new ArrayList<>();
 
     public MyHomesViewModel(@NonNull Application application) {
         super(application);
@@ -26,4 +28,8 @@ public class MyHomesViewModel extends AndroidViewModel {
     public void clearActiveLocationList() {
         activeLocationList.clear();
     }
+
+    public void insertInspection(Inspection inspection) { inspectionList.add(inspection); }
+    public List<Inspection> getInspectionList() { return inspectionList; }
+    public void clearInspectionList() { inspectionList.clear(); }
 }

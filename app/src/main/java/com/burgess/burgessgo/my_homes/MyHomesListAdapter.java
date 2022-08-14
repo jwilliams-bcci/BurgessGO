@@ -7,12 +7,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.R;
+import com.burgess.burgessgo.ServerCallback;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import data.models.ActiveLocation;
@@ -30,6 +34,7 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
 
     public MyHomesListAdapter(List<ActiveLocation> homeList, GoAPIQueue queue, MyHomesViewModel vm) {
         this.activeLocationList = homeList;
+        inspectionList = new ArrayList<>();
         this.queue = queue;
         this.vm = vm;
         selectedItems = new int[homeList.size()];
@@ -51,13 +56,25 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
 
         holder.itemView.setOnClickListener(v -> {
             setSelectedItem(position);
-            // TODO: load inspectionlist tableview
             notifyDataSetChanged();
         });
 
         if (position == getSelectedItem()) {
             holder.getConstraintLayoutLower().setVisibility(View.VISIBLE);
             holder.getImageViewArrow().setRotation(180);
+            inspectionList.clear();
+            queue.getRequestQueue().add(queue.getInspectionsAtLocation(vm, i.getLocationId(), new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    inspectionList = vm.getInspectionList();
+                    setUpInspectionTable(holder);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(holder.getConstraintLayoutLower(), message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
         } else {
             holder.getConstraintLayoutLower().setVisibility(View.GONE);
             holder.getImageViewArrow().setRotation(90);
@@ -70,31 +87,33 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
         holder.getButtonOpenDefects().setOnClickListener(v -> {
             Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Open Defects for " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
         });
-
-        //TODO: down here
-        TableRow tr = new TableRow(holder.itemView.getContext());
-        View view = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.item_inspection_table_row, tr, false);
-        TextView txt = (TextView) view.findViewById(R.id.item_inspection_table_row_date);
-        txt.setText("1/1/2050");
-
-        TableRow tr2 = new TableRow(holder.itemView.getContext());
-        View view2 = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.item_inspection_table_row, tr2, false);
-        TextView txt2 = (TextView) view2.findViewById(R.id.item_inspection_table_row_date);
-        txt2.setText("1/2/2050");
-
-        TableRow tr3 = new TableRow(holder.itemView.getContext());
-        View view3 = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.item_inspection_table_row, tr3, false);
-        TextView txt3 = (TextView) view3.findViewById(R.id.item_inspection_table_row_date);
-        txt3.setText("1/3/2050");
-
-        holder.getTableLayout().addView(view);
-        holder.getTableLayout().addView(view2);
-        holder.getTableLayout().addView(view3);
     }
 
     @Override
     public int getItemCount() {
         return activeLocationList.size();
+    }
+
+    public void setUpInspectionTable(MyHomesViewHolder holder) {
+        if (holder.getTableLayout().getChildCount() > 1) {
+            holder.getTableLayout().removeViews(1, holder.getTableLayout().getChildCount()-1);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        for (int lcv = 0; lcv < inspectionList.size(); lcv++) {
+            Inspection i = inspectionList.get(lcv);
+            TableRow tr = new TableRow(holder.itemView.getContext());
+            View view = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.item_inspection_table_row, tr, false);
+            TextView txtDate = view.findViewById(R.id.item_inspection_table_row_date);
+            TextView txtType = view.findViewById(R.id.item_inspection_table_row_type);
+            TextView txtStatus = view.findViewById(R.id.item_inspection_table_row_status);
+
+            txtDate.setText(i.getInspectionDate().toLocalDate().format(formatter));
+            txtType.setText(i.getTypeName());
+            txtStatus.setText(i.getResolution());
+
+            holder.getTableLayout().addView(view);
+        }
     }
 
     private void setSelectedItem(int position) {
