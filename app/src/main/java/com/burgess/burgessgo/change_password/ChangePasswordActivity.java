@@ -1,8 +1,10 @@
-package com.burgess.burgessgo;
+package com.burgess.burgessgo.change_password;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.burgess.burgessgo.R;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 

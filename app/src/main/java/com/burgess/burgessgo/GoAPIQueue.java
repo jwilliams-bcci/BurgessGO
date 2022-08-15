@@ -743,6 +743,7 @@ public class GoAPIQueue {
                     callback.onFailure("Error in parsing defect data, please notify support");
                 }
             }
+            callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
                 GoLogger.log('E', TAG, "Lost connection in getDefectsAtLocation");

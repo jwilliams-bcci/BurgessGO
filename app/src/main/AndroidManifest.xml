@@ -24,7 +24,7 @@
             android:name=".reschedule_inspection.RescheduleInspectionActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".change_password.ChangePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".help.HelpActivity"
