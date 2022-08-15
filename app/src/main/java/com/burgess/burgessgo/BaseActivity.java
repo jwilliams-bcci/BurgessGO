@@ -8,7 +8,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.burgess.burgessgo.activate_homes.ActivateHomesActivity;
+import com.burgess.burgessgo.change_password.ChangePasswordActivity;
 import com.burgess.burgessgo.deactivate_homes.DeactivateHomesActivity;
+import com.burgess.burgessgo.help.HelpActivity;
+import com.burgess.burgessgo.login.LoginActivity;
 import com.burgess.burgessgo.my_homes.MyHomesActivity;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsActivity;
 import com.burgess.burgessgo.request_home_access.RequestHomeAccessActivity;
@@ -56,13 +59,16 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.menuItem_help:
-                Toast.makeText(this, "Clicked Help", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_changePassword:
-                Toast.makeText(this, "Clicked Change Password", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ChangePasswordActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menuItem_logout:
-                Toast.makeText(this, "Clicked Logout", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

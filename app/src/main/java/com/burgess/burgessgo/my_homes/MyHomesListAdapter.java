@@ -15,6 +15,7 @@ import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
 import com.burgess.burgessgo.location_defects.LocationDefectsActivity;
+import com.burgess.burgessgo.schedule_inspection.ScheduleInspectionActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.format.DateTimeFormatter;
@@ -84,7 +85,9 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
         holder.getTextViewCommunity().setText(i.getCommunity());
         holder.getTextViewAddress().setText(i.getAddress());
         holder.getButtonScheduleNewInspection().setOnClickListener(v -> {
-            Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Schedule New Inspection for " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
+            Intent intent = new Intent(holder.itemView.getContext(), ScheduleInspectionActivity.class);
+            intent.putExtra(ScheduleInspectionActivity.INTENT_EXTRA, i);
+            holder.itemView.getContext().startActivity(intent);
         });
         holder.getButtonOpenDefects().setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), LocationDefectsActivity.class);

@@ -22,6 +22,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.burgess.burgessgo.activate_homes.ActivateHomesViewModel;
 import com.burgess.burgessgo.add_new_address.AddNewAddressViewModel;
 import com.burgess.burgessgo.deactivate_homes.DeactivateHomesViewModel;
@@ -30,6 +31,7 @@ import com.burgess.burgessgo.location_defects.LocationDefectsViewModel;
 import com.burgess.burgessgo.my_homes.MyHomesViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.request_home_access.RequestHomeAccessViewModel;
+import com.burgess.burgessgo.schedule_inspection.ScheduleInspectionViewModel;
 import com.burgess.burgessgo.share_transfer_homes.ShareTransferHomesViewModel;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsViewModel;
 
@@ -37,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -47,6 +50,7 @@ import data.models.Community;
 import data.models.Home;
 import data.models.Inspection;
 import data.models.InspectionDefect;
+import data.models.InspectionType;
 import data.models.NonPassedInspection;
 import data.models.Street;
 
@@ -70,6 +74,8 @@ public class GoAPIQueue {
     private static final String GET_BUILDER_PERSONNEL_URL = "GetBuilderPersonnel?builderId=%s&locationId=%s";
     private static final String GET_INSPECTIONS_AT_LOCATION_URL = "GetInspectionsAtLocation?locationId=%s";
     private static final String GET_OPEN_DEFECTS_AT_LOCATION_URL = "GetOpenDefectsAtLocation?locationId=%s";
+    private static final String GET_INSPECTION_TYPES_URL = "GetInspectionTypes?locationId=%s&userId=%s";
+    private static final String POST_RESCHEDULE_INSPECTION_URL = "PostRescheduleInspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -144,6 +150,7 @@ public class GoAPIQueue {
         });
         return request;
     }
+
     public JsonArrayRequest getUpcomingInspections(UpcomingInspectionsViewModel vm, int builderPersonnelId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_UPCOMING_INSPECTIONS_URL, builderPersonnelId);
@@ -755,6 +762,75 @@ public class GoAPIQueue {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in getDefectsAtLocation: " + errorMessage);
                 callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getInspectionTypes(ScheduleInspectionViewModel vm, int locationId, int userId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_INSPECTION_TYPES_URL, locationId, userId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    InspectionType inspectionType = new InspectionType();
+                    inspectionType.setInspectionTypeId(obj.optInt("InspectionTypeID"));
+                    inspectionType.setTypeName(obj.optString("TypeName"));
+                    vm.insertInspectionType(inspectionType);
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getInspectionTypes: " + e.getMessage());
+                    callback.onFailure("Error in parsing inspection type data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getInspectionTypes");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getInspectionTypes");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getInspectionTypes: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+
+    public StringRequest postRescheduleInspection(int inspectionId, String requestDate, String poNumber, String inspectionNotes, int userId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_RESCHEDULE_INSPECTION_URL, inspectionId, requestDate, userId, poNumber, inspectionNotes);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postRescheduleInspection.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postRescheduleInspection.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postRescheduleInspection: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
             }
         }) {
             @Override

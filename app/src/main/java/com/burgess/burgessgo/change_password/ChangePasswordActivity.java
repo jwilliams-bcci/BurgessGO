@@ -4,9 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.R;
 
-public class ChangePasswordActivity extends AppCompatActivity {
+public class ChangePasswordActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
