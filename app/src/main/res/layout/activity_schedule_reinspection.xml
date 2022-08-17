@@ -9,8 +9,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/schedule_reinspection_toolbar"
-        android:layout_width="409dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/burgessOrange"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -18,34 +18,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_main"
-        app:title="Schedule Reinspection" />
+        app:title="Schedule Reinspection"
+        app:titleTextColor="@color/colorWhite" />
 
     <EditText
         android:id="@+id/schedule_reinspection_textView_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:editable="false"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
+        android:enabled="false"
+        android:hint="@string/address"
         android:inputType="none"
+        android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_toolbar" />
 
     <EditText
         android:id="@+id/schedule_reinspection_textView_inspection_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:editable="false"
         android:ems="10"
+        android:enabled="false"
+        android:hint="@string/inspection_type"
         android:inputType="none"
+        android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/schedule_reinspection_textView_address"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/schedule_reinspection_textView_address"
         app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_date" />
 
     <EditText
@@ -55,12 +60,12 @@
         android:layout_marginTop="16dp"
         android:editable="true"
         android:ems="10"
-        android:hint="PO Number"
-        android:inputType="textPersonName"
+        android:hint="@string/po_number"
+        android:inputType="text"
+        android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/schedule_reinspection_textView_address"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/schedule_reinspection_textView_address"
         app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_inspection_type" />
 
     <EditText
@@ -70,12 +75,14 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:focusable="false"
-        android:hint="MM/DD/YYYY"
+        android:hint="@string/dateFormat"
         android:inputType="date"
+        android:minHeight="48dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/schedule_reinspection_textView_address"
         app:layout_constraintStart_toStartOf="@+id/schedule_reinspection_textView_address"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_address" />
+        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_address"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/schedule_reinspection_textView_notes"
@@ -84,34 +91,27 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Notes"
-        android:inputType="textMultiLine"
+        android:hint="@string/notes"
+        android:inputType="textMultiLine|text"
         android:minLines="3"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/schedule_reinspection_textView_po_number"
-        app:layout_constraintStart_toStartOf="@+id/schedule_reinspection_textView_po_number"
+        app:layout_constraintEnd_toEndOf="@+id/schedule_reinspection_textView_address"
+        app:layout_constraintStart_toStartOf="@+id/schedule_reinspection_textView_address"
         app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_po_number" />
 
     <Button
         android:id="@+id/schedule_reinspection_button_schedule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Schedule Reinspection"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/schedule_reinspection"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_notes" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Schedule Reinspection"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/schedule_reinspection_textView_notes"
+        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

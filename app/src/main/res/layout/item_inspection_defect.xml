@@ -4,67 +4,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_inspection_defect_constraint_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="16dp">
-
-    <TextView
-        android:id="@+id/item_inspection_defect_textView_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_inspection_defect_constraint_layout_header"
+        android:id="@+id/item_inspection_defect_constraint_layout_upper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/material_dynamic_neutral80"
-        android:paddingBottom="5dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_textView_category">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/item_inspection_defect_textView_column_header_1"
+            android:id="@+id/item_inspection_defect_textView_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:text="TextView"
+            android:hint="@string/category"
+            android:paddingVertical="8dp"
+            android:textColor="@color/burgessBlue"
+            android:textColorHint="@color/burgessBlue"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_inspection_defect_constraint_layout_header_inner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLightGray"
+            android:paddingBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_textView_category">
+
+            <TextView
+                android:id="@+id/item_inspection_defect_textView_column_header_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:hint="@string/column_header_1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_defect_textView_column_header_2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/item_inspection_defect_textView_column_header_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:hint="@string/column_header_2"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.808"
+                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_begin="205dp"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_inspection_defect_constraint_layout_lower"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_constraint_layout_upper">
+
         <TextView
-            android:id="@+id/item_inspection_defect_textView_column_header_2"
+            android:id="@+id/item_inspection_defect_textView_item_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:hint="@string/deviation_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline8"
+            app:layout_constraintTop_toTopOf="@+id/item_inspection_defect_textView_item_description" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="205dp" />
+
+        <TextView
+            android:id="@+id/item_inspection_defect_textView_item_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:hint="@string/item_description"
+            app:layout_constraintEnd_toStartOf="@+id/item_inspection_defect_textView_item_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/item_inspection_defect_textView_item_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="4dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/item_inspection_defect_constraint_layout_header"
-        app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_constraint_layout_header" />
-
-    <TextView
-        android:id="@+id/item_inspection_defect_textView_item_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_inspection_defect_textView_item_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

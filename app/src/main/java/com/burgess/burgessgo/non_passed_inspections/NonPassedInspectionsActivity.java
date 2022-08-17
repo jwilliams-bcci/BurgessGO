@@ -60,7 +60,7 @@ public class NonPassedInspectionsActivity extends BaseActivity {
     }
 
     public void initializeDisplayContent() {
-        mListAdapter = new NonPassedInspectionsListAdapter(new NonPassedInspectionsListAdapter.InspectDiff());
+        mListAdapter = new NonPassedInspectionsListAdapter();
         mRecyclerInspectionList.setAdapter(mListAdapter);
         mRecyclerInspectionList.setLayoutManager(new LinearLayoutManager(this));
         updateInspectionList();
@@ -71,8 +71,9 @@ public class NonPassedInspectionsActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getNonPassedInspections(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                mListAdapter.setNonPassedInspectionList(mViewModel.getInspectionList());
+                mListAdapter.setCurrentSectionHeader("");
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getInspectionList());
             }
 
             @Override

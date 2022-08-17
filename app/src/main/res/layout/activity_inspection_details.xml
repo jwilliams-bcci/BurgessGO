@@ -18,48 +18,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_main"
-        app:title="Inspection Details" />
+        app:title="Inspection Details"
+        app:titleTextColor="@color/colorWhite" />
 
     <TextView
         android:id="@+id/inspection_details_textView_address"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="32dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/inspection_defects_label_inspection_type"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_address" />
 
     <TextView
         android:id="@+id/inspection_details_textView_inspection_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_inspection_type" />
 
     <TextView
         android:id="@+id/inspection_details_textView_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_status" />
 
     <TextView
         android:id="@+id/inspection_details_textView_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_date" />
 
     <TextView
         android:id="@+id/inspection_details_textView_consultant"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_consultant" />
 
@@ -67,57 +67,74 @@
         android:id="@+id/inspection_details_button_reschedule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Reschedule"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="@string/reschedule"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_consultant" />
 
     <TextView
         android:id="@+id/inspection_defects_label_address"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Address:"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:labelFor="@id/inspection_details_textView_address"
+        android:text="@string/address"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection_details_toolbar" />
 
     <TextView
         android:id="@+id/inspection_defects_label_inspection_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Inspection Type:"
+        android:layout_marginEnd="8dp"
+        android:labelFor="@id/inspection_details_textView_inspection_type"
+        android:text="@string/inspection_type"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_1" />
 
     <TextView
         android:id="@+id/inspection_defects_label_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Status:"
+        android:layout_marginEnd="8dp"
+        android:labelFor="@id/inspection_details_textView_status"
+        android:text="@string/status"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_2" />
 
     <TextView
         android:id="@+id/inspection_defects_label_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Date:"
+        android:layout_marginEnd="8dp"
+        android:labelFor="@id/inspection_details_textView_date"
+        android:text="@string/date"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_3" />
 
     <TextView
         android:id="@+id/inspection_defects_label_consultant"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Consultant:"
+        android:layout_marginEnd="8dp"
+        android:labelFor="@id/inspection_details_textView_consultant"
+        android:text="@string/consultant"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_4" />
 
@@ -125,9 +142,9 @@
         android:id="@+id/inspection_defects_divider_1"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,9 +154,9 @@
         android:id="@+id/inspection_defects_divider_2"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,9 +166,9 @@
         android:id="@+id/inspection_defects_divider_3"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -161,12 +178,19 @@
         android:id="@+id/inspection_defects_divider_4"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_label_date" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="141dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,27 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="address">Address</string>
+    <string name="consultant">Consultant</string>
+    <string name="date">Date</string>
+    <string name="status">Status</string>
+    <string name="inspection_type">Inspection Type</string>
+    <string name="reschedule">Reschedule</string>
+    <string name="po_number">PO Number</string>
+    <string name="notes">Notes</string>
+    <string name="emailHint">Email Address(es) (comma separated)</string>
+    <string name="e_mail_report">E-mail Report</string>
+    <string name="send">Send</string>
+    <string name="copy_me">Copy Me</string>
+    <string name="messageHint">Message (Optional)</string>
+    <string name="re_inspect">Re-Inspect</string>
+    <string name="view_report">View Report</string>
+    <string name="view_defects">View Defects</string>
+    <string name="schedule_reinspection">Schedule Reinspection</string>
+    <string name="dateFormat">MM/DD/YYYY</string>
+    <string name="category">Category</string>
+    <string name="column_header_1">Column Header 1</string>
+    <string name="column_header_2">Column Header 2</string>
+    <string name="item_description">Item Description</string>
+    <string name="deviation_text">Deviation Text</string>
 </resources>

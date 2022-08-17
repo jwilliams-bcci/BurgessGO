@@ -1,21 +1,30 @@
 package com.burgess.burgessgo.schedule_reinspection;
 
+import static com.burgess.burgessgo.Constants.PREF;
+import static com.burgess.burgessgo.Constants.PREF_SECURITY_USER_ID;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.burgess.burgessgo.BaseActivity;
+import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
+import com.burgess.burgessgo.ServerCallback;
+import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -36,8 +45,12 @@ public class ScheduleReinspectionActivity extends BaseActivity {
 
     // Class members
     private static GoLogger logger;
+    private static GoAPIQueue apiQueue;
+    private SharedPreferences mSharedPreferences;
     private NonPassedInspection mInspection;
     private final Calendar mCalendar = Calendar.getInstance();
+    private DateTimeFormatter mFormatter;
+    private SimpleDateFormat mDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +58,12 @@ public class ScheduleReinspectionActivity extends BaseActivity {
         setContentView(R.layout.activity_schedule_reinspection);
         setSupportActionBar(findViewById(R.id.schedule_reinspection_toolbar));
 
-        // Prepare logger
+        // Prepare API queue and logger
+        apiQueue = GoAPIQueue.getInstance(this);
         logger = GoLogger.getInstance(this);
+
+        // Prepare shared preferences
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
 
         // Get intent
         Intent intent = getIntent();
@@ -69,7 +86,23 @@ public class ScheduleReinspectionActivity extends BaseActivity {
 
     public void initializeButtons() {
         mButtonSchedule.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Schedule button clicked", Snackbar.LENGTH_SHORT).show();
+            String date = mTextViewDate.getText().toString();
+            String poNumber = mTextViewPONumber.getText().toString().isEmpty() ? mTextViewPONumber.getText().toString() : "";
+            String notes = mTextViewNotes.getText().toString().isEmpty() ? mTextViewNotes.getText().toString() : "";
+            int userId = mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1);
+            apiQueue.getRequestQueue().add(apiQueue.postScheduleReinspection(mInspection.getInspectionId(), date, poNumber, notes, userId, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    Snackbar.make(mConstraintLayout, "Reinspection request sent successfully", Snackbar.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, "Reschedule request failed yo, fix that shiz: " + message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
         });
     }
 

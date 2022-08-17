@@ -6,24 +6,32 @@
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/drawable/button_rounded_blue.xml" value="0.2985" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/drawable/button_rounded_orange.xml" value="0.2985" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_add_new_address.xml" value="0.338768115942029" />
-        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_inspection_defects.xml" value="0.28532608695652173" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_change_password.xml" value="0.34601449275362317" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_help.xml" value="0.2749094202898551" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_inspection_defects.xml" value="0.5" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_inspection_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_main.xml" value="0.27898550724637683" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_my_homes.xml" value="0.338768115942029" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_non_passed_inspection_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_non_passed_inspections.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_request_home_access.xml" value="0.36666666666666664" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_reschedule_inspection.xml" value="0.34601449275362317" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_schedule_inspection.xml" value="0.28532608695652173" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_schedule_reinspection.xml" value="0.5" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_share_transfer_homes.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_upcoming_inspections.xml" value="0.27898550724637683" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_inspection.xml" value="0.34601449275362317" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_inspection_defect.xml" value="0.5" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_inspection_table_row.xml" value="0.28532608695652173" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_my_home.xml" value="0.5" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_request_home_access.xml" value="0.28532608695652173" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_share_transfer_home.xml" value="0.28532608695652173" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/menu/menu_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_activate_homes.xml" value="0.30027173913043476" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_add_new_address.xml" value="0.30027173913043476" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_deactivate_homes.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_inspection_details.xml" value="0.35280797101449274" />
-        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_location_defects.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_login.xml" value="0.338768115942029" />
-        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_report_viewer.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_request_home_access.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_reschedule_inspection.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/activity_schedule_inspection.xml" value="0.30978260869565216" />
@@ -34,8 +42,6 @@
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_home.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inactive_home.xml" value="0.30027173913043476" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inspection.xml" value="0.33" />
-        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inspection_defect.xml" value="0.30978260869565216" />
-        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inspection_table_row.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_my_home.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_request_home_access.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_share_transfer_home.xml" value="0.5" />

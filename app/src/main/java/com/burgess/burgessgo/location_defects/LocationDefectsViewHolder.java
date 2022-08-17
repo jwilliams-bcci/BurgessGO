@@ -21,7 +21,7 @@ public class LocationDefectsViewHolder extends RecyclerView.ViewHolder {
     public LocationDefectsViewHolder(@NonNull View itemView) {
         super(itemView);
         mConstraintLayout = itemView.findViewById(R.id.item_inspection_defect_constraint_layout);
-        mConstraintLayoutHeader = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_header);
+        mConstraintLayoutHeader = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_header_inner);
         mTextViewCategory = itemView.findViewById(R.id.item_inspection_defect_textView_category);
         mTextViewColumnHeader1 = itemView.findViewById(R.id.item_inspection_defect_textView_column_header_1);
         mTextViewColumnHeader2 = itemView.findViewById(R.id.item_inspection_defect_textView_column_header_2);

@@ -85,7 +85,7 @@ public class InspectionDefectsActivity extends BaseActivity {
         mTextViewInspectionDate.setText(mInspection.getInspectionDate().toLocalDate().format(formatter));
         mTextViewConsultant.setText(mInspection.getInspectedBy());
 
-        mListAdapter = new InspectionDefectsListAdapter(new InspectionDefectsListAdapter.InspectDiff());
+        mListAdapter = new InspectionDefectsListAdapter();
         mRecyclerInspectionDefectList.setAdapter(mListAdapter);
         mRecyclerInspectionDefectList.setLayoutManager(new LinearLayoutManager(this));
         updateInspectionDefectList();
@@ -96,8 +96,9 @@ public class InspectionDefectsActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getInspectionDefects(mViewModel, mInspection.getInspectionId(), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                mListAdapter.setInspectionDefectList(mViewModel.getInspectionDefectList());
+                mListAdapter.setCurrentSectionHeader("");
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getInspectionDefectList());
             }
 
             @Override

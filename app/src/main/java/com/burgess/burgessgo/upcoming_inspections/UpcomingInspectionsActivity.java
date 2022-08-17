@@ -68,9 +68,9 @@ public class UpcomingInspectionsActivity extends BaseActivity {
 
     public void initializeDisplayContent() {
         mSwipeRefreshLayout.setOnRefreshListener(this::updateInspectionList);
-        mListAdapter = new UpcomingInspectionsListAdapter(new UpcomingInspectionsListAdapter.InspectDiff());
-        mRecyclerInspectionList.setAdapter(mListAdapter);
+        mListAdapter = new UpcomingInspectionsListAdapter();
         mRecyclerInspectionList.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerInspectionList.setAdapter(mListAdapter);
         updateInspectionList();
     }
 
@@ -80,8 +80,9 @@ public class UpcomingInspectionsActivity extends BaseActivity {
             @Override
             public void onSuccess(String message) {
                 Snackbar.make(mConstraintLayout, "Inspections updated", Snackbar.LENGTH_SHORT).show();
+                mListAdapter.setInspectionList(mViewModel.getInspectionList());
+                mListAdapter.setCurrentSectionHeader("");
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getInspectionList());
                 mSwipeRefreshLayout.setRefreshing(false);
             }
 

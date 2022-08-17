@@ -14,6 +14,7 @@
     <color name="burgessOrange">#F27D00</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGray">#797272</color>
+    <color name="colorLightGray">#C5C7C9</color>
     <color name="colorLockScreen">#B0000000</color>
     <color name="colorLightRed">#FF0000</color>
     <color name="colorGreen">#00FF00</color>
