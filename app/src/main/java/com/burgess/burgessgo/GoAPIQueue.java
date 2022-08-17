@@ -29,6 +29,7 @@ import com.burgess.burgessgo.deactivate_homes.DeactivateHomesViewModel;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsViewModel;
 import com.burgess.burgessgo.location_defects.LocationDefectsViewModel;
 import com.burgess.burgessgo.my_homes.MyHomesViewModel;
+import com.burgess.burgessgo.non_passed_inspection_details.NonPassedInspectionDetailsViewModel;
 import com.burgess.burgessgo.non_passed_inspections.NonPassedInspectionsViewModel;
 import com.burgess.burgessgo.request_home_access.RequestHomeAccessViewModel;
 import com.burgess.burgessgo.schedule_inspection.ScheduleInspectionViewModel;
@@ -75,6 +76,7 @@ public class GoAPIQueue {
     private static final String GET_INSPECTIONS_AT_LOCATION_URL = "GetInspectionsAtLocation?locationId=%s";
     private static final String GET_OPEN_DEFECTS_AT_LOCATION_URL = "GetOpenDefectsAtLocation?locationId=%s";
     private static final String GET_INSPECTION_TYPES_URL = "GetInspectionTypes?locationId=%s&userId=%s";
+    private static final String GET_REPORT_DATA_URL = "GetReportData?InspectionId=%s&SecurityUserId=%s";
     private static final String POST_RESCHEDULE_INSPECTION_URL = "PostRescheduleInspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
 
     private static GoAPIQueue instance;
@@ -802,6 +804,35 @@ public class GoAPIQueue {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in getInspectionTypes: " + errorMessage);
                 callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest getReportData(NonPassedInspectionDetailsViewModel vm, int inspectionId, int userId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_REPORT_DATA_URL, inspectionId, userId);
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
+            vm.setReportUrl(response);
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getReportData.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getReportData.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getReportData: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
             }
         }) {
             @Override
