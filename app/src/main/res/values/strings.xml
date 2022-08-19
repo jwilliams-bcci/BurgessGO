@@ -35,4 +35,5 @@
     <string name="column_header_2">Column Header 2</string>
     <string name="item_description">Item Description</string>
     <string name="deviation_text">Deviation Text</string>
+    <string name="add_new_address">Add New Address</string>
 </resources>

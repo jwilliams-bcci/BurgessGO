@@ -23,12 +23,17 @@ import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
+import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import data.models.ActiveLocation;
 import data.models.BuilderPersonnel;
@@ -93,7 +98,34 @@ public class ScheduleInspectionActivity extends BaseActivity {
 
     public void initializeButtons() {
         mButtonSchedule.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Schedule button clicked", Snackbar.LENGTH_SHORT).show();
+            InspectionType t = (InspectionType) mSpinnerInspectionType.getSelectedItem();
+            TimeZone tz = TimeZone.getDefault();
+            Calendar cal = GregorianCalendar.getInstance(tz);
+            int offsetInMillis = tz.getOffset(cal.getTimeInMillis());
+            String timeAdjustHours = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
+            timeAdjustHours = (offsetInMillis >= 0 ? "+" : "-") + timeAdjustHours;
+
+            int locationId = mActiveLocation.getLocationId();
+            String address = mActiveLocation.getAddress();
+            String requestDate = mTextViewInspectionDate.getText().toString();
+            int inspectionTypeId = t.getInspectionTypeId();
+            String poNumber = mTextViewPONumber.getText().toString().isEmpty() ? mTextViewPONumber.getText().toString() : "";
+            String notes = mTextViewNotes.getText().toString().isEmpty() ? mTextViewNotes.getText().toString() : "";
+            int userId = mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1);
+
+            apiQueue.getRequestQueue().add(apiQueue.postScheduleInspection(locationId, address, requestDate, inspectionTypeId, poNumber, notes, userId, timeAdjustHours, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    Snackbar.make(mConstraintLayout, "Inspection succesfully scheduled", Snackbar.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
         });
     }
 

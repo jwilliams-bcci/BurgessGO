@@ -71,7 +71,7 @@ public class ShareTransferHomesActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                mListAdapter = new ShareTransferHomesListAdapter(mViewModel.getActiveHomeList(), apiQueue, mViewModel, mSharedPreferences.getInt(PREF_BUILDER_ID, -1));
+                mListAdapter = new ShareTransferHomesListAdapter(mViewModel.getActiveHomeList(), apiQueue, mViewModel, mSharedPreferences.getInt(PREF_BUILDER_ID, -1), mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1));
                 mRecyclerHomeList.setAdapter(mListAdapter);
                 mListAdapter.notifyDataSetChanged();
             }

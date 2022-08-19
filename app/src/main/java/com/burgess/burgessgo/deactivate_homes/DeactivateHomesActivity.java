@@ -53,24 +53,16 @@ public class DeactivateHomesActivity extends BaseActivity {
         mEditor = mSharedPreferences.edit();
 
         initializeViews();
-        initializeButtons();
         initializeDisplayContent();
     }
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.deactivate_homes_constraint_layout);
         mRecyclerActiveHomesList = findViewById(R.id.deactivate_homes_recycler_active_home_list);
-        mButtonSubmit = findViewById(R.id.deactivate_homes_button_submit);
-    }
-
-    private void initializeButtons() {
-        mButtonSubmit.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Submit button clicked", Snackbar.LENGTH_SHORT).show();
-        });
     }
 
     private void initializeDisplayContent() {
-        mListAdapter = new DeactivateHomesListAdapter(new DeactivateHomesListAdapter.InspectDiff());
+        mListAdapter = new DeactivateHomesListAdapter(apiQueue, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1));
         mRecyclerActiveHomesList.setAdapter(mListAdapter);
         mRecyclerActiveHomesList.setLayoutManager(new LinearLayoutManager(this));
         updateActiveHomeList();
@@ -81,8 +73,8 @@ public class DeactivateHomesActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                mListAdapter.setHomeList(mViewModel.getActiveHomeList());
                 mListAdapter.notifyDataSetChanged();
-                mListAdapter.submitList(mViewModel.getActiveHomeList());
             }
 
             @Override

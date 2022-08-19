@@ -1,11 +1,14 @@
 package com.burgess.burgessgo.share_transfer_homes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
+import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -27,15 +31,17 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
     private GoAPIQueue queue;
     private ShareTransferHomesViewModel vm;
     private int builderId;
+    private int builderPersonnelId;
 
     public ShareTransferHomesListAdapter(){}
 
-    public ShareTransferHomesListAdapter(List<Home> list, GoAPIQueue queue, ShareTransferHomesViewModel vm, int builderId) {
+    public ShareTransferHomesListAdapter(List<Home> list, GoAPIQueue queue, ShareTransferHomesViewModel vm, int builderId, int builderPersonnelId) {
         homeList = list;
         selectedItems = new int[homeList.size()];
         this.queue = queue;
         this.vm = vm;
         this.builderId = builderId;
+        this.builderPersonnelId = builderPersonnelId;
         for (int lcv = 0; lcv < selectedItems.length; lcv++) {
             selectedItems[lcv] = 0;
         }
@@ -50,7 +56,7 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
 
     @Override
     public void onBindViewHolder(@NonNull ShareTransferHomesViewHolder holder, int position) {
-        Home i = (Home) homeList.get(position);
+        Home i = homeList.get(position);
 
         holder.itemView.setOnClickListener(v -> {
             setSelectedItem(position);
@@ -92,9 +98,11 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
         });
         holder.getButtonShare().setOnClickListener(v -> {
             Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Share button for location " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
+            sendRequest("BurgessGoAssignmentAdd", ((BuilderPersonnel) holder.getSpinnerBuilderPersonnel().getSelectedItem()).getBuilderPersonnelId(), i.getLocationId(), holder.itemView.getContext());
         });
         holder.getButtonTransfer().setOnClickListener(v -> {
             Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Transfer button for location " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
+            sendRequest("BurgessGoAssignmentMove", ((BuilderPersonnel) holder.getSpinnerBuilderPersonnel().getSelectedItem()).getBuilderPersonnelId(), i.getLocationId(), holder.itemView.getContext());
         });
     }
 
@@ -120,6 +128,21 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
             }
         }
         return -1;
+    }
+
+    private void sendRequest(String action, int builderPersonnelIdNew, int locationId, Context ctx) {
+        queue.getRequestQueue().add(queue.postShareTransferHomes(action, builderPersonnelIdNew, locationId, builderPersonnelId, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                Intent intent = new Intent(ctx, UpcomingInspectionsActivity.class);
+                ctx.startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(ctx, "Failed! " + message, Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     //region GETTERS AND SETTERS

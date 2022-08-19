@@ -1,9 +1,9 @@
 package com.burgess.burgessgo.non_passed_inspection_details;
 
 import static com.burgess.burgessgo.Constants.PREF;
+import static com.burgess.burgessgo.Constants.PREF_BUILDER_PERSONNEL_ID;
 import static com.burgess.burgessgo.Constants.PREF_SECURITY_USER_ID;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,7 +19,7 @@ import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
-import com.burgess.burgessgo.ReportViewerActivity;
+import com.burgess.burgessgo.report_viewer.ReportViewerActivity;
 import com.burgess.burgessgo.ServerCallback;
 import com.burgess.burgessgo.inspection_defects.InspectionDefectsActivity;
 import com.burgess.burgessgo.schedule_reinspection.ScheduleReinspectionActivity;
@@ -126,7 +126,23 @@ public class NonPassedInspectionDetailsActivity extends BaseActivity {
         });
 
         mButtonEmailSend.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Send Email clicked", Snackbar.LENGTH_SHORT).show();
+            int inspectionId = mInspection.getInspectionId();
+            int securityUserId = mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1);
+            int builderPersonnelId = mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1);
+            String emailTo = mTextViewEmailTo.getText().toString();
+            String emailMessage = mTextViewEmailMessage.getText().toString();
+            int ccSupervisor = mCheckBoxEmailCopyMe.isChecked() ? 1 : 0;
+            apiQueue.getRequestQueue().add(apiQueue.postSendEmail(inspectionId, securityUserId, builderPersonnelId, emailTo, emailMessage, ccSupervisor, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    Snackbar.make(mConstraintLayout, "Email sent successfully", Snackbar.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, "Email send failed", Snackbar.LENGTH_SHORT).show();
+                }
+            }));
         });
     }
 

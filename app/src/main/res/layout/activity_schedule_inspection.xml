@@ -18,7 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_main"
-        app:title="Schedule Inspection" />
+        app:title="Schedule Inspection"
+        app:titleTextColor="@color/colorWhite" />
 
     <EditText
         android:id="@+id/schedule_inspection_textView_address"
@@ -29,8 +30,9 @@
         android:layout_marginEnd="8dp"
         android:editable="false"
         android:ems="10"
-        android:hint="Address"
+        android:hint="@string/address"
         android:inputType="none"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_inspection_toolbar" />
@@ -44,8 +46,9 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:focusable="false"
-        android:hint="MM/DD/YYYY"
+        android:hint="@string/dateFormat"
         android:inputType="date"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_inspection_textView_address" />
@@ -57,6 +60,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/inspection_type"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_inspection_textView_inspection_date" />
@@ -69,8 +74,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="PO Number"
+        android:hint="@string/po_number"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_inspection_spinner_inspection_type" />
@@ -84,7 +90,7 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Notes..."
+        android:hint="@string/notes"
         android:inputType="textMultiLine"
         android:minLines="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +104,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
         android:text="Schedule Inspection"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_inspection_textView_notes" />

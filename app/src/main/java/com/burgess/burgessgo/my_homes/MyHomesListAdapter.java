@@ -1,6 +1,8 @@
 package com.burgess.burgessgo.my_homes;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,6 +113,11 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
             Inspection i = inspectionList.get(lcv);
             TableRow tr = new TableRow(holder.itemView.getContext());
             View view = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.item_inspection_table_row, tr, false);
+
+            if (lcv % 2 == 1) {
+                view.setBackgroundColor(Color.LTGRAY);
+            }
+
             TextView txtDate = view.findViewById(R.id.item_inspection_table_row_date);
             TextView txtType = view.findViewById(R.id.item_inspection_table_row_type);
             TextView txtStatus = view.findViewById(R.id.item_inspection_table_row_status);

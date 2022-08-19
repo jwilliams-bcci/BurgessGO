@@ -9,17 +9,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.models.InspectionDefect;
 
 public class LocationDefectsListAdapter extends RecyclerView.Adapter<LocationDefectsViewHolder> {
-    private List<InspectionDefect> defectList;
+    private List<InspectionDefect> mDefectList;
+    private String mCurrentSectionHeader;
 
-    public LocationDefectsListAdapter(){}
+    public LocationDefectsListAdapter() {
+        mDefectList = new ArrayList<>();
+        mCurrentSectionHeader = "";
+    }
 
     public LocationDefectsListAdapter(List<InspectionDefect> list) {
-        defectList = list;
+        mDefectList = list;
+        mCurrentSectionHeader = "";
     }
 
     @NonNull
@@ -31,7 +37,14 @@ public class LocationDefectsListAdapter extends RecyclerView.Adapter<LocationDef
 
     @Override
     public void onBindViewHolder(@NonNull LocationDefectsViewHolder holder, int position) {
-        InspectionDefect i = defectList.get(position);
+        InspectionDefect i = mDefectList.get(position);
+
+        if (mCurrentSectionHeader.compareTo(i.getDefectCategoryDisplayName()) == 0) {
+            holder.getConstraintLayoutUpper().setVisibility(View.GONE);
+        } else {
+            holder.getConstraintLayoutUpper().setVisibility(View.VISIBLE);
+            mCurrentSectionHeader = i.getDefectCategoryDisplayName();
+        }
 
         holder.getTextViewCategory().setText(i.getDefectCategoryDisplayName());
         holder.getTextViewColumnHeader1().setText(i.getColumnHeader1());
@@ -42,6 +55,6 @@ public class LocationDefectsListAdapter extends RecyclerView.Adapter<LocationDef
 
     @Override
     public int getItemCount() {
-        return defectList.size();
+        return mDefectList.size();
     }
 }

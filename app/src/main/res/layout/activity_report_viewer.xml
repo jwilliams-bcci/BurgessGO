@@ -5,7 +5,7 @@
     android:id="@+id/report_viewer_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportViewerActivity">
+    tools:context=".report_viewer.ReportViewerActivity">
 
     <WebView
         android:id="@+id/report_viewer_web_view"

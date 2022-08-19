@@ -1,41 +1,69 @@
 package com.burgess.burgessgo.activate_homes;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.burgess.burgessgo.R;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import data.models.Home;
 
-public class ActivateHomesListAdapter extends ListAdapter<Home, ActivateHomesViewHolder> {
-    protected ActivateHomesListAdapter(@NonNull DiffUtil.ItemCallback<Home> diffCallback) {
-        super(diffCallback);
+public class ActivateHomesListAdapter extends RecyclerView.Adapter<ActivateHomesViewHolder> {
+    private List<Home> mHomeList;
+
+    public ActivateHomesListAdapter() {
+        mHomeList = new ArrayList<>();
+    }
+
+    public ActivateHomesListAdapter(List<Home> list) {
+        mHomeList = list;
     }
 
     @NonNull
     @Override
     public ActivateHomesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return ActivateHomesViewHolder.create(parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+        return new ActivateHomesViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ActivateHomesViewHolder holder, int position) {
-        Home i = getItem(position);
-        holder.bind(i.getCommunity(), i.getAddress(), i);
+        Home i = mHomeList.get(position);
+
+        holder.getCheckBoxActivate().setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                i.setSelected(true);
+            } else {
+                i.setSelected(false);
+            }
+        });
+
+        holder.getTextViewCommunity().setText(i.getCommunity());
+        holder.getTextViewAddress().setText(i.getAddress());
     }
 
-    public static class InspectDiff extends DiffUtil.ItemCallback<Home> {
-        @Override
-        public boolean areItemsTheSame(@NonNull Home oldItem, @NonNull Home newItem) {
-            return oldItem == newItem;
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Home oldItem, @NonNull Home newItem) {
-            return oldItem.getLocationId() == newItem.getLocationId() && Objects.equals(oldItem.getAddress(), newItem.getAddress()) && Objects.equals(oldItem.getCommunity(), newItem.getCommunity());
-        }
+    @Override
+    public int getItemCount() {
+        return mHomeList.size();
     }
+
+    //region GETTERS AND SETTERS
+    public List<Home> getHomeList() {
+        return mHomeList;
+    }
+
+    public void setHomeList(List<Home> mHomeList) {
+        this.mHomeList = mHomeList;
+    }
+    //endregion
 }

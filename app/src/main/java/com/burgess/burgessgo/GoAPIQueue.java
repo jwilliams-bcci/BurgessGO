@@ -79,6 +79,11 @@ public class GoAPIQueue {
     private static final String GET_REPORT_DATA_URL = "GetReportData?InspectionId=%s&SecurityUserId=%s";
     private static final String POST_RESCHEDULE_INSPECTION_URL = "PostRescheduleInspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
     private static final String POST_SCHEDULE_REINSPECTION_URL = "PostScheduleReinspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
+    private static final String POST_SEND_EMAIL_URL = "PostSendEmail?inspectionId=%s&securityUserId=%s&builderPersonnelId=%s&customEmail=%s&ccSupervisor=%s&customMessage=%s";
+    private static final String POST_SCHEDULE_INSPECTION_URL = "PostScheduleInspection?locationId=%s&locationName=%s&requestDate=%s&inspectionTypeId=%s&poNumber=%s&notes=%s&userId=%s&timeAdjustHours=%s";
+    private static final String POST_ACTIVATE_HOMES_URL = "PostActivateHomes?locations=%s&builderPersonnelId=%s";
+    private static final String POST_DEACTIVATE_HOMES_URL = "PostDeactivateHomes?locationId=%s&builderPersonnelId=%s";
+    private static final String POST_SHARE_TRANSFER_HOMES_URL = "PostShareTransferHomes?action=%s&builderPersonnelIdNew=%s&locationId=%s&builderPersonnelIdPrior=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -892,6 +897,146 @@ public class GoAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in postRescheduleInspection: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postSendEmail(int inspectionId, int securityUserId, int builderPersonnelId, String customEmail, String customMessage, int ccSupervisor, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_SEND_EMAIL_URL, inspectionId, securityUserId, builderPersonnelId, customEmail, ccSupervisor, customMessage);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postSendEmail.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postSendEmail.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postSendEmail: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postScheduleInspection(int locationId, String locationName, String requestDate, int inspectionTypeId, String poNumber, String notes, int userId, String timeAdjustHours, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_SCHEDULE_INSPECTION_URL, locationId, locationName, requestDate, inspectionTypeId, poNumber, notes, userId, timeAdjustHours);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postScheduleInspection.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postScheduleInspection.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postScheduleInspection: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postActivateHomes(String locations, int builderPersonnelId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_ACTIVATE_HOMES_URL, locations, builderPersonnelId);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postActivateHomes.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postActivateHomes.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postActivateHomes: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postDeactivateHomes(int locationId, int builderPersonnelId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_DEACTIVATE_HOMES_URL, locationId, builderPersonnelId);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postDeactivateHomes.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postDeactivateHomes.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postDeactivateHomes: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postShareTransferHomes(String action, int builderPersonnelIdNew, int locationId, int builderPersonnelIdPrior, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_SHARE_TRANSFER_HOMES_URL, action, builderPersonnelIdNew, locationId, builderPersonnelIdPrior);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postShareTransferHomes.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postShareTransferHomes.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postShareTransferHomes: " + errorMessage);
                 callback.onFailure("Error! Please contact support...");
             }
         }) {

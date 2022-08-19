@@ -11,8 +11,10 @@ import com.burgess.burgessgo.R;
 
 public class LocationDefectsViewHolder extends RecyclerView.ViewHolder {
     private final ConstraintLayout mConstraintLayout;
+    private final ConstraintLayout mConstraintLayoutUpper;
+    private final ConstraintLayout mConstraintLayoutHeaderInner;
+    private final ConstraintLayout mConstraintLayoutLower;
     private final TextView mTextViewCategory;
-    private final ConstraintLayout mConstraintLayoutHeader;
     private final TextView mTextViewColumnHeader1;
     private final TextView mTextViewColumnHeader2;
     private final TextView mTextViewItemDescription;
@@ -21,7 +23,9 @@ public class LocationDefectsViewHolder extends RecyclerView.ViewHolder {
     public LocationDefectsViewHolder(@NonNull View itemView) {
         super(itemView);
         mConstraintLayout = itemView.findViewById(R.id.item_inspection_defect_constraint_layout);
-        mConstraintLayoutHeader = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_header_inner);
+        mConstraintLayoutUpper = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_upper);
+        mConstraintLayoutHeaderInner = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_header_inner);
+        mConstraintLayoutLower = itemView.findViewById(R.id.item_inspection_defect_constraint_layout_lower);
         mTextViewCategory = itemView.findViewById(R.id.item_inspection_defect_textView_category);
         mTextViewColumnHeader1 = itemView.findViewById(R.id.item_inspection_defect_textView_column_header_1);
         mTextViewColumnHeader2 = itemView.findViewById(R.id.item_inspection_defect_textView_column_header_2);
@@ -30,16 +34,12 @@ public class LocationDefectsViewHolder extends RecyclerView.ViewHolder {
     }
 
     //region GETTERS
-    public ConstraintLayout getConstraintLayout() {
-        return mConstraintLayout;
+    public ConstraintLayout getConstraintLayoutHeaderInner() {
+        return mConstraintLayoutHeaderInner;
     }
 
     public TextView getTextViewCategory() {
         return mTextViewCategory;
-    }
-
-    public ConstraintLayout getConstraintLayoutHeader() {
-        return mConstraintLayoutHeader;
     }
 
     public TextView getTextViewColumnHeader1() {
@@ -57,5 +57,17 @@ public class LocationDefectsViewHolder extends RecyclerView.ViewHolder {
     public TextView getTextViewItemText() {
         return mTextViewItemText;
     }
-    //endregion
+
+    public ConstraintLayout getConstraintLayout() {
+        return mConstraintLayout;
+    }
+
+    public ConstraintLayout getConstraintLayoutUpper() {
+        return mConstraintLayoutUpper;
+    }
+
+    public ConstraintLayout getConstraintLayoutLower() {
+        return mConstraintLayoutLower;
+    }
+//endregion
 }

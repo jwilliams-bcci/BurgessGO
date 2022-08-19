@@ -17,7 +17,6 @@ public class ActivateHomesViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextViewCommunity;
     private final TextView mTextViewAddress;
     private final CheckBox mCheckBoxActivate;
-    private Home mInactiveHome;
 
     public ActivateHomesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -26,14 +25,17 @@ public class ActivateHomesViewHolder extends RecyclerView.ViewHolder {
         mCheckBoxActivate = itemView.findViewById(R.id.item_home_checkBox_activated);
     }
 
-    public void bind(String community, String address, Home inactiveHome) {
-        mTextViewCommunity.setText(community);
-        mTextViewAddress.setText(address);
-        mInactiveHome = inactiveHome;
+    //region GETTERS
+    public TextView getTextViewCommunity() {
+        return mTextViewCommunity;
     }
 
-    public static ActivateHomesViewHolder create(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
-        return new ActivateHomesViewHolder(view);
+    public TextView getTextViewAddress() {
+        return mTextViewAddress;
     }
+
+    public CheckBox getCheckBoxActivate() {
+        return mCheckBoxActivate;
+    }
+    //endregion
 }

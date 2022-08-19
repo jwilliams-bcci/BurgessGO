@@ -1,10 +1,12 @@
-package com.burgess.burgessgo;
+package com.burgess.burgessgo.report_viewer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
+
+import com.burgess.burgessgo.R;
 
 public class ReportViewerActivity extends AppCompatActivity {
     private static final String TAG = "REPORT_VIEWER";
