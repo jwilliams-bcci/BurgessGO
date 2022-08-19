@@ -18,4 +18,5 @@
     <color name="colorLockScreen">#B0000000</color>
     <color name="colorLightRed">#FF0000</color>
     <color name="colorGreen">#00FF00</color>
+    <color name="colorDarkRed">#520600</color>
 </resources>

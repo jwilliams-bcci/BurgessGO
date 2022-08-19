@@ -6,22 +6,28 @@ import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Home implements Parcelable {
     private int LocationId;
     private String Community;
     private String Address;
-    private List<BuilderPersonnel> BuilderPersonnelList;
+    private int InspectionCount;
+    private int InspectionCountRemaining;
+    private String StreetName;
+    private int MAXBuilderPersonnelIDRequestingAccess;
     private boolean IsSelected;
+    private List<BuilderPersonnel> BuilderPersonnelList = new ArrayList<>();
 
     public Home(){}
 
-    public Home(int locationId, String community, String address, List<BuilderPersonnel> builderPersonnelList, boolean isSelected) {
+    public Home(int locationId, String community, String address, List<BuilderPersonnel> builderPersonnelList, int builderPersonnelRequestingAccess, boolean isSelected) {
         LocationId = locationId;
         Community = community;
         Address = address;
         BuilderPersonnelList = builderPersonnelList;
+        MAXBuilderPersonnelIDRequestingAccess = builderPersonnelRequestingAccess;
         IsSelected = isSelected;
     }
 
@@ -30,6 +36,10 @@ public class Home implements Parcelable {
         LocationId = in.readInt();
         Community = in.readString();
         Address = in.readString();
+        InspectionCount = in.readInt();
+        InspectionCountRemaining = in.readInt();
+        StreetName = in.readString();
+        MAXBuilderPersonnelIDRequestingAccess = in.readInt();
         IsSelected = in.readBoolean();
     }
 
@@ -57,6 +67,10 @@ public class Home implements Parcelable {
         parcel.writeInt(LocationId);
         parcel.writeString(Community);
         parcel.writeString(Address);
+        parcel.writeInt(InspectionCount);
+        parcel.writeInt(InspectionCountRemaining);
+        parcel.writeString(StreetName);
+        parcel.writeInt(MAXBuilderPersonnelIDRequestingAccess);
         parcel.writeBoolean(IsSelected);
     }
 
@@ -99,6 +113,38 @@ public class Home implements Parcelable {
 
     public void setSelected(boolean selected) {
         IsSelected = selected;
+    }
+
+    public int getMAXBuilderPersonnelIDRequestingAccess() {
+        return MAXBuilderPersonnelIDRequestingAccess;
+    }
+
+    public void setMAXBuilderPersonnelIDRequestingAccess(int builderPersonnelIdRequestingAccess) {
+        MAXBuilderPersonnelIDRequestingAccess = builderPersonnelIdRequestingAccess;
+    }
+
+    public int getInspectionCount() {
+        return InspectionCount;
+    }
+
+    public void setInspectionCount(int inspectionCount) {
+        InspectionCount = inspectionCount;
+    }
+
+    public int getInspectionCountRemaining() {
+        return InspectionCountRemaining;
+    }
+
+    public void setInspectionCountRemaining(int inspectionCountRemaining) {
+        InspectionCountRemaining = inspectionCountRemaining;
+    }
+
+    public String getStreetName() {
+        return StreetName;
+    }
+
+    public void setStreetName(String streetName) {
+        StreetName = streetName;
     }
 //endregion
 }

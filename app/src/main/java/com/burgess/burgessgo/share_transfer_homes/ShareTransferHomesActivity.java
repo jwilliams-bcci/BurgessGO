@@ -4,7 +4,6 @@ import static com.burgess.burgessgo.Constants.PREF;
 import static com.burgess.burgessgo.Constants.PREF_BUILDER_ID;
 import static com.burgess.burgessgo.Constants.PREF_BUILDER_PERSONNEL_ID;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,8 +18,11 @@ import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
-import com.burgess.burgessgo.deactivate_homes.DeactivateHomesListAdapter;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
+
+import data.models.Home;
 
 public class ShareTransferHomesActivity extends BaseActivity {
     private static final String TAG = "SHARE_TRANSFER_HOMES";
@@ -62,18 +64,19 @@ public class ShareTransferHomesActivity extends BaseActivity {
     }
 
     public void initializeDisplayContent() {
+        mListAdapter = new ShareTransferHomesListAdapter(apiQueue, mViewModel, mSharedPreferences.getInt(PREF_BUILDER_ID, -1), mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1));
+        mRecyclerHomeList.setAdapter(mListAdapter);
         mRecyclerHomeList.setLayoutManager(new LinearLayoutManager(this));
-        updateHomeList();
+        updateActiveHomeList();
     }
 
-    public void updateHomeList() {
+    public void updateActiveHomeList() {
         mViewModel.clearActiveHomeList();
         apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                mListAdapter = new ShareTransferHomesListAdapter(mViewModel.getActiveHomeList(), apiQueue, mViewModel, mSharedPreferences.getInt(PREF_BUILDER_ID, -1), mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1));
-                mRecyclerHomeList.setAdapter(mListAdapter);
-                mListAdapter.notifyDataSetChanged();
+                mListAdapter.setHomeList(mViewModel.getActiveHomeList());
+                updateBuilderPersonnelList(mViewModel.getActiveHomeList());
             }
 
             @Override
@@ -81,5 +84,22 @@ public class ShareTransferHomesActivity extends BaseActivity {
                 Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
             }
         }));
+    }
+
+    public void updateBuilderPersonnelList(List<Home> list) {
+        for (int lcv = 0; lcv < list.size(); lcv++) {
+            Home home = list.get(lcv);
+            apiQueue.getRequestQueue().add(apiQueue.getBuilderPersonnel(home, mSharedPreferences.getInt(PREF_BUILDER_ID, -1), home.getLocationId(), new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    mListAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
+        }
     }
 }

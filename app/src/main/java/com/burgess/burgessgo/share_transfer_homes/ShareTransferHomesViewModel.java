@@ -28,8 +28,4 @@ public class ShareTransferHomesViewModel extends AndroidViewModel {
     public void clearActiveHomeList() {
         activeHomeList.clear();
     }
-
-    public void insertBuilderPersonnel(BuilderPersonnel builderPersonnel) { builderPersonnelList.add(builderPersonnel); }
-    public List<BuilderPersonnel> getBuilderPersonnelList() { return builderPersonnelList; }
-    public void clearBuilderPersonnelList() { builderPersonnelList.clear(); }
 }

@@ -1,6 +1,5 @@
 package com.burgess.burgessgo.my_homes;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.GoAPIQueue;
@@ -24,12 +22,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.models.ActiveLocation;
 import data.models.Home;
 import data.models.Inspection;
 
 public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> {
-    private List<ActiveLocation> activeLocationList;
+    private List<Home> mHomeList;
     private List<Inspection> inspectionList;
     private int[] selectedItems;
     private GoAPIQueue queue;
@@ -37,8 +34,8 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
 
     public MyHomesListAdapter() {}
 
-    public MyHomesListAdapter(List<ActiveLocation> homeList, GoAPIQueue queue, MyHomesViewModel vm) {
-        this.activeLocationList = homeList;
+    public MyHomesListAdapter(List<Home> homeList, GoAPIQueue queue, MyHomesViewModel vm) {
+        this.mHomeList = homeList;
         inspectionList = new ArrayList<>();
         this.queue = queue;
         this.vm = vm;
@@ -57,7 +54,7 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyHomesViewHolder holder, int position) {
-        ActiveLocation i = activeLocationList.get(position);
+        Home i = mHomeList.get(position);
 
         holder.itemView.setOnClickListener(v -> {
             setSelectedItem(position);
@@ -100,7 +97,7 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
 
     @Override
     public int getItemCount() {
-        return activeLocationList.size();
+        return mHomeList.size();
     }
 
     public void setUpInspectionTable(MyHomesViewHolder holder) {

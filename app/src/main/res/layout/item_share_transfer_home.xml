@@ -56,14 +56,13 @@
         android:id="@+id/item_share_transfer_home_constraint_layout_lower"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_share_transfer_home_constraint_layout_upper"
-        app:layout_constraintVertical_bias="0.545"
-        tools:visibility="gone">
+        app:layout_constraintVertical_bias="0.545">
 
         <Spinner
             android:id="@+id/item_share_transfer_home_spinner_builder_personnel"
@@ -103,5 +102,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_share_transfer_home_button_share" />
+
+        <Button
+            android:id="@+id/item_share_transfer_home_button_reject_share_request"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/button_rounded_red"
+            android:text="Reject Share Request"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_share_transfer_home_button_transfer" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

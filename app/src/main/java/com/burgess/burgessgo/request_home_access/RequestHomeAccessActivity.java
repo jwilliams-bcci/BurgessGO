@@ -2,6 +2,7 @@ package com.burgess.burgessgo.request_home_access;
 
 import static com.burgess.burgessgo.Constants.PREF;
 import static com.burgess.burgessgo.Constants.PREF_BUILDER_ID;
+import static com.burgess.burgessgo.Constants.PREF_BUILDER_PERSONNEL_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -70,6 +71,8 @@ public class RequestHomeAccessActivity extends BaseActivity {
 
     public void initializeDisplayContent() {
         mSpinnerAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, mViewModel.getBuilderPersonnelList());
+        mListAdapter = new RequestHomeAccessListAdapter(apiQueue, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1));
+        mRecyclerHomeList.setAdapter(mListAdapter);
         mRecyclerHomeList.setLayoutManager(new LinearLayoutManager(this));
         updateBuilderPersonnelList();
     }
@@ -107,8 +110,7 @@ public class RequestHomeAccessActivity extends BaseActivity {
         apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, builderPersonnelId, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                mListAdapter = new RequestHomeAccessListAdapter(mViewModel.getActiveHomeList());
-                mRecyclerHomeList.setAdapter(mListAdapter);
+                mListAdapter.setHomeList(mViewModel.getActiveHomeList());
                 mListAdapter.notifyDataSetChanged();
             }
 

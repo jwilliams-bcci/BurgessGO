@@ -27,16 +27,12 @@ import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
-import data.models.ActiveLocation;
-import data.models.BuilderPersonnel;
+import data.models.Home;
 import data.models.InspectionType;
 
 public class ScheduleInspectionActivity extends BaseActivity {
@@ -57,7 +53,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
     private static GoLogger logger;
     private static GoAPIQueue apiQueue;
     private final Calendar mCalendar = Calendar.getInstance();
-    private ActiveLocation mActiveLocation;
+    private Home mHome;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private ArrayAdapter<InspectionType> mSpinnerAdapter;
@@ -79,7 +75,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
 
         // Get intent
         Intent intent = getIntent();
-        mActiveLocation = intent.getParcelableExtra(INTENT_EXTRA);
+        mHome = intent.getParcelableExtra(INTENT_EXTRA);
 
         initializeViews();
         initializeButtons();
@@ -105,8 +101,8 @@ public class ScheduleInspectionActivity extends BaseActivity {
             String timeAdjustHours = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
             timeAdjustHours = (offsetInMillis >= 0 ? "+" : "-") + timeAdjustHours;
 
-            int locationId = mActiveLocation.getLocationId();
-            String address = mActiveLocation.getAddress();
+            int locationId = mHome.getLocationId();
+            String address = mHome.getAddress();
             String requestDate = mTextViewInspectionDate.getText().toString();
             int inspectionTypeId = t.getInspectionTypeId();
             String poNumber = mTextViewPONumber.getText().toString().isEmpty() ? mTextViewPONumber.getText().toString() : "";
@@ -143,13 +139,13 @@ public class ScheduleInspectionActivity extends BaseActivity {
             new DatePickerDialog(this, date, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        mTextViewAddress.setText(mActiveLocation.getAddress());
+        mTextViewAddress.setText(mHome.getAddress());
 
         loadSpinner();
     }
 
     public void loadSpinner() {
-        apiQueue.getRequestQueue().add(apiQueue.getInspectionTypes(mViewModel, mActiveLocation.getLocationId(), mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1), new ServerCallback() {
+        apiQueue.getRequestQueue().add(apiQueue.getInspectionTypes(mViewModel, mHome.getLocationId(), mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 mSpinnerInspectionType.setAdapter(mSpinnerAdapter);

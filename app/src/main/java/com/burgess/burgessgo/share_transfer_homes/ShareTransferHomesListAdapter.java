@@ -11,20 +11,25 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.GoAPIQueue;
+import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import data.models.BuilderPersonnel;
 import data.models.Home;
 
 public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTransferHomesViewHolder> {
+    private final String TAG = "SHARE_TRANSFER_HOMES_LIST_ADAPTER";
+
     private List<Home> homeList;
     private List<BuilderPersonnel> personnelList;
     private int[] selectedItems;
@@ -33,15 +38,22 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
     private int builderId;
     private int builderPersonnelId;
 
-    public ShareTransferHomesListAdapter(){}
-
-    public ShareTransferHomesListAdapter(List<Home> list, GoAPIQueue queue, ShareTransferHomesViewModel vm, int builderId, int builderPersonnelId) {
-        homeList = list;
-        selectedItems = new int[homeList.size()];
+    public ShareTransferHomesListAdapter(GoAPIQueue queue, ShareTransferHomesViewModel vm, int builderId, int builderPersonnelId) {
+        homeList = new ArrayList<>();
+        personnelList = new ArrayList<>();
         this.queue = queue;
         this.vm = vm;
         this.builderId = builderId;
         this.builderPersonnelId = builderPersonnelId;
+    }
+
+    public ShareTransferHomesListAdapter(List<Home> list, GoAPIQueue queue, ShareTransferHomesViewModel vm, int builderId, int builderPersonnelId) {
+        homeList = list;
+        this.queue = queue;
+        this.vm = vm;
+        this.builderId = builderId;
+        this.builderPersonnelId = builderPersonnelId;
+        selectedItems = new int[homeList.size()];
         for (int lcv = 0; lcv < selectedItems.length; lcv++) {
             selectedItems[lcv] = 0;
         }
@@ -58,51 +70,41 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
     public void onBindViewHolder(@NonNull ShareTransferHomesViewHolder holder, int position) {
         Home i = homeList.get(position);
 
+        if (i.getMAXBuilderPersonnelIDRequestingAccess() > 0) {
+            holder.getConstraintLayoutUpper().setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorLightRed));
+        }
+
+        ArrayAdapter<BuilderPersonnel> spinnerAdapter = new ArrayAdapter<>(holder.itemView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, i.getBuilderPersonnelList());
+        holder.getSpinnerBuilderPersonnel().setAdapter(spinnerAdapter);
+
         holder.itemView.setOnClickListener(v -> {
             setSelectedItem(position);
-            vm.clearBuilderPersonnelList();
-            queue.getRequestQueue().add(queue.getBuilderPersonnel(vm, builderId, i.getLocationId(), new ServerCallback() {
-                @Override
-                public void onSuccess(String message) {
-                    holder.getSpinnerBuilderPersonnel().setAdapter(new ArrayAdapter<>(holder.itemView.getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, vm.getBuilderPersonnelList()));
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    Snackbar.make(holder.getConstraintLayoutLower(), message, Snackbar.LENGTH_SHORT).show();
-                }
-            }));
             notifyDataSetChanged();
         });
 
         if (position == getSelectedItem()) {
             holder.getConstraintLayoutLower().setVisibility(View.VISIBLE);
             holder.getImageViewArrow().setRotation(180);
+            if (i.getMAXBuilderPersonnelIDRequestingAccess() > 0) {
+                holder.getButtonRejectShareRequest().setVisibility(View.VISIBLE);
+            } else {
+                holder.getButtonRejectShareRequest().setVisibility(View.GONE);
+            }
         } else {
             holder.getConstraintLayoutLower().setVisibility(View.GONE);
             holder.getImageViewArrow().setRotation(90);
         }
         holder.getTextViewCommunity().setText(i.getCommunity());
         holder.getTextViewAddress().setText(i.getAddress());
-        holder.getSpinnerBuilderPersonnel().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                BuilderPersonnel p = (BuilderPersonnel) adapterView.getSelectedItem();
-                Snackbar.make(holder.getConstraintLayoutLower(), "Selected " + p.getPersonnelName() + ", ID: " + p.getBuilderPersonnelId(), Snackbar.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         holder.getButtonShare().setOnClickListener(v -> {
-            Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Share button for location " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
             sendRequest("BurgessGoAssignmentAdd", ((BuilderPersonnel) holder.getSpinnerBuilderPersonnel().getSelectedItem()).getBuilderPersonnelId(), i.getLocationId(), holder.itemView.getContext());
         });
         holder.getButtonTransfer().setOnClickListener(v -> {
-            Snackbar.make(holder.getConstraintLayoutLower(), "Clicked Transfer button for location " + i.getLocationId(), Snackbar.LENGTH_SHORT).show();
             sendRequest("BurgessGoAssignmentMove", ((BuilderPersonnel) holder.getSpinnerBuilderPersonnel().getSelectedItem()).getBuilderPersonnelId(), i.getLocationId(), holder.itemView.getContext());
+        });
+        holder.getButtonRejectShareRequest().setOnClickListener(v -> {
+            sendRequest("BurgessGoAssignmentDeny", ((BuilderPersonnel) holder.getSpinnerBuilderPersonnel().getSelectedItem()).getBuilderPersonnelId(), i.getLocationId(), holder.itemView.getContext());
         });
     }
 
@@ -152,6 +154,10 @@ public class ShareTransferHomesListAdapter extends RecyclerView.Adapter<ShareTra
 
     public void setHomeList(List<Home> homeList) {
         this.homeList = homeList;
+        selectedItems = new int[homeList.size()];
+        for (int lcv = 0; lcv < selectedItems.length; lcv++) {
+            selectedItems[lcv] = 0;
+        }
     }
 
     public List<BuilderPersonnel> getPersonnelList() {

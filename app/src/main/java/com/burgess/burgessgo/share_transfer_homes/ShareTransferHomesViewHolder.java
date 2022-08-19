@@ -32,6 +32,7 @@ public class ShareTransferHomesViewHolder extends RecyclerView.ViewHolder {
     private final Spinner mSpinnerBuilderPersonnel;
     private final Button mButtonShare;
     private final Button mButtonTransfer;
+    private final Button mButtonRejectShareRequest;
 
     public ShareTransferHomesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -41,6 +42,7 @@ public class ShareTransferHomesViewHolder extends RecyclerView.ViewHolder {
         mSpinnerBuilderPersonnel = itemView.findViewById(R.id.item_share_transfer_home_spinner_builder_personnel);
         mButtonShare = itemView.findViewById(R.id.item_share_transfer_home_button_share);
         mButtonTransfer = itemView.findViewById(R.id.item_share_transfer_home_button_transfer);
+        mButtonRejectShareRequest = itemView.findViewById(R.id.item_share_transfer_home_button_reject_share_request);
         mConstraintLayoutUpper = itemView.findViewById(R.id.item_share_transfer_home_constraint_layout_upper);
         mConstraintLayoutLower = itemView.findViewById(R.id.item_share_transfer_home_constraint_layout_lower);
     }
@@ -78,5 +80,8 @@ public class ShareTransferHomesViewHolder extends RecyclerView.ViewHolder {
         return mImageViewArrow;
     }
 
-    //endregion
+    public Button getButtonRejectShareRequest() {
+        return mButtonRejectShareRequest;
+    }
+//endregion
 }

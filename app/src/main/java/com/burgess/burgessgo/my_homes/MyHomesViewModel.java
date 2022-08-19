@@ -8,25 +8,25 @@ import androidx.lifecycle.AndroidViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.models.ActiveLocation;
+import data.models.Home;
 import data.models.Inspection;
 
 public class MyHomesViewModel extends AndroidViewModel {
-    private List<ActiveLocation> activeLocationList = new ArrayList<>();
+    private List<Home> mHomeList = new ArrayList<>();
     private List<Inspection> inspectionList = new ArrayList<>();
 
     public MyHomesViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public void insertActiveLocation(ActiveLocation activeLocation) {
-        activeLocationList.add(activeLocation);
+    public void insertActiveHome(Home home) {
+        mHomeList.add(home);
     }
-    public List<ActiveLocation> getActiveLocationList() {
-        return activeLocationList;
+    public List<Home> getHomeList() {
+        return mHomeList;
     }
-    public void clearActiveLocationList() {
-        activeLocationList.clear();
+    public void clearHomeList() {
+        mHomeList.clear();
     }
 
     public void insertInspection(Inspection inspection) { inspectionList.add(inspection); }

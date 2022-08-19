@@ -3,7 +3,6 @@ package com.burgess.burgessgo.my_homes;
 import static com.burgess.burgessgo.Constants.PREF;
 import static com.burgess.burgessgo.Constants.PREF_BUILDER_PERSONNEL_ID;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -84,11 +83,11 @@ public class MyHomesActivity extends BaseActivity {
     }
 
     public void updateMyHomesList() {
-        mViewModel.clearActiveLocationList();
-        apiQueue.getRequestQueue().add(apiQueue.getActiveLocationsBySuper(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), null, new ServerCallback() {
+        mViewModel.clearHomeList();
+        apiQueue.getRequestQueue().add(apiQueue.getActiveHomes(mViewModel, mSharedPreferences.getInt(PREF_BUILDER_PERSONNEL_ID, -1), new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                mListAdapter = new MyHomesListAdapter(mViewModel.getActiveLocationList(), apiQueue, mViewModel);
+                mListAdapter = new MyHomesListAdapter(mViewModel.getHomeList(), apiQueue, mViewModel);
                 mRecyclerMyHomesList.setAdapter(mListAdapter);
                 mListAdapter.notifyDataSetChanged();
             }

@@ -40,12 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import data.models.ActiveLocation;
 import data.models.BuilderPersonnel;
 import data.models.Community;
 import data.models.Home;
@@ -64,14 +61,13 @@ public class GoAPIQueue {
     private static final String GET_UPCOMING_INSPECTIONS_URL = "GetUpcomingInspections?builderPersonnelId=%s";
     private static final String GET_NON_PASSED_INSPECTIONS_URL = "GetNonPassedInspections?builderPersonnelId=%s";
     private static final String GET_INSPECTION_DEFECTS_URL = "GetInspectionDefects?inspectionId=%s";
-    private static final String GET_ACTIVE_LOCATIONS_BY_SUPER_URL = "GetActiveLocationsBySuper?builderPersonnelId=%s&source=%s";
     private static final String GET_COMMUNITY_LIST_URL = "GetCommunityList?builderId=%s&userId=%s&source=%s";
     private static final String GET_STATE_LIST_URL = "GetStateList?builderId=%s&userId=%s&source=%s";
     private static final String GET_CITY_LIST_URL = "GetCityList?builderId=%s";
     private static final String GET_COUNTY_LIST_URL = "GetCountyList?builderId=%s&userId=%s&source=%s";
     private static final String GET_STREET_LIST_URL = "GetStreetList?builderId=%s&communityId=%s";
     private static final String GET_HOMES_FOR_ACTIVATION_URL = "GetHomesForActivation?builderPersonnelId=%s";
-    private static final String GET_HOMES_FOR_DEACTIVATION_URL = "GetHomesForDeactivation?builderPersonnelId=%s";
+    private static final String GET_ACTIVE_HOMES = "GetActiveHomes?builderPersonnelId=%s";
     private static final String GET_BUILDER_PERSONNEL_URL = "GetBuilderPersonnel?builderId=%s&locationId=%s";
     private static final String GET_INSPECTIONS_AT_LOCATION_URL = "GetInspectionsAtLocation?locationId=%s";
     private static final String GET_OPEN_DEFECTS_AT_LOCATION_URL = "GetOpenDefectsAtLocation?locationId=%s";
@@ -84,6 +80,7 @@ public class GoAPIQueue {
     private static final String POST_ACTIVATE_HOMES_URL = "PostActivateHomes?locations=%s&builderPersonnelId=%s";
     private static final String POST_DEACTIVATE_HOMES_URL = "PostDeactivateHomes?locationId=%s&builderPersonnelId=%s";
     private static final String POST_SHARE_TRANSFER_HOMES_URL = "PostShareTransferHomes?action=%s&builderPersonnelIdNew=%s&locationId=%s&builderPersonnelIdPrior=%s";
+    private static final String POST_REQUEST_HOME_ACCESS_URL = "PostRequestHomeAccess?builderPersonnelId=%s&locationId=%s";
 
     private static GoAPIQueue instance;
     private RequestQueue queue;
@@ -303,51 +300,6 @@ public class GoAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + errorMessage);
-                callback.onFailure("Error! Please contact support");
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-                return params;
-            }
-        };
-        return request;
-    }
-    public JsonArrayRequest getActiveLocationsBySuper(MyHomesViewModel vm, int builderPersonnelId, String source, final ServerCallback callback) {
-        String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_ACTIVE_LOCATIONS_BY_SUPER_URL, builderPersonnelId, source);
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            for (int lcv = 0; lcv < response.length(); lcv++) {
-                try {
-                    JSONObject obj = response.getJSONObject(lcv);
-                    ActiveLocation i = new ActiveLocation();
-                    i.setLocationId(obj.optInt("LocationID"));
-                    i.setCommunity(obj.optString("Community"));
-                    i.setAddress(obj.optString("Address"));
-                    i.setInspectionCount(obj.optInt("InspectionCount"));
-                    i.setInspectionCountRemaining(obj.optInt("InspectionCountRemaining"));
-                    i.setStreetName(obj.optString("StreetName"));
-                    i.setMAXBuilderPersonnelIDRequestingAccess(obj.optInt("MAXBuilderPersonnelIDRequestingAccess"));
-                    vm.insertActiveLocation(i);
-                } catch (JSONException e) {
-                    GoLogger.log('E', TAG, "ERROR in getInspectionDefects: " + e.getMessage());
-                    callback.onFailure("Error in parsing active location data, please notify support");
-                }
-            }
-            callback.onSuccess("Success");
-        }, error -> {
-            if (error instanceof NoConnectionError) {
-                GoLogger.log('E', TAG, "Lost connection in getActiveLocationsBySuper");
-                callback.onFailure("No connection!");
-            } else if (error instanceof TimeoutError) {
-                GoLogger.log('E', TAG, "Request timed out in getActiveLocationsBySuper");
-                callback.onFailure("Request timed out!");
-            } else {
-                String errorMessage = new String(error.networkResponse.data);
-                GoLogger.log('E', TAG, "ERROR in getActiveLocationsBySuper: " + errorMessage);
                 callback.onFailure("Error! Please contact support");
             }
         }) {
@@ -604,7 +556,7 @@ public class GoAPIQueue {
     }
     public JsonArrayRequest getActiveHomes(ViewModel vm, int builderPersonnelId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_HOMES_FOR_DEACTIVATION_URL, builderPersonnelId);
+        url += String.format(GET_ACTIVE_HOMES, builderPersonnelId);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
@@ -614,7 +566,14 @@ public class GoAPIQueue {
                     i.setLocationId(obj.optInt("LocationID"));
                     i.setCommunity(obj.optString("Community"));
                     i.setAddress(obj.optString("Address"));
-                    if (vm instanceof DeactivateHomesViewModel) {
+                    i.setInspectionCount(obj.optInt("InspectionCount"));
+                    i.setInspectionCountRemaining(obj.optInt("InspectionCountRemaining"));
+                    i.setStreetName(obj.optString("StreetName"));
+                    i.setMAXBuilderPersonnelIDRequestingAccess(obj.optInt("MAXBuilderPersonnelIDRequestingAccess"));
+
+                    if (vm instanceof MyHomesViewModel) {
+                        ((MyHomesViewModel) vm).insertActiveHome(i);
+                    } else if (vm instanceof DeactivateHomesViewModel) {
                         ((DeactivateHomesViewModel) vm).insertActiveHome(i);
                     } else if (vm instanceof ShareTransferHomesViewModel) {
                         ((ShareTransferHomesViewModel) vm).insertActiveHome(i);
@@ -649,7 +608,7 @@ public class GoAPIQueue {
         };
         return request;
     }
-    public JsonArrayRequest getBuilderPersonnel(ViewModel vm, int builderId, int locationId, final ServerCallback callback) {
+    public JsonArrayRequest getBuilderPersonnel(Home home, int builderId, int locationId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_BUILDER_PERSONNEL_URL, builderId, locationId);
 
@@ -663,11 +622,56 @@ public class GoAPIQueue {
                     i.setInitials(obj.optString("Initials"));
                     i.setAddress1(obj.optString("Address1"));
                     i.setAddress2(obj.optString("Address2"));
-                    if (vm instanceof ShareTransferHomesViewModel) {
-                        ((ShareTransferHomesViewModel) vm).insertBuilderPersonnel(i);
-                    } else if (vm instanceof RequestHomeAccessViewModel) {
-                        ((RequestHomeAccessViewModel) vm).insertBuilderPersonnel(i);
+                    if (home.getMAXBuilderPersonnelIDRequestingAccess() > 0) {
+                        if (i.getBuilderPersonnelId() == home.getMAXBuilderPersonnelIDRequestingAccess()) {
+                            home.getBuilderPersonnelList().add(i);
+                        }
+                    } else {
+                        home.getBuilderPersonnelList().add(i);
                     }
+                } catch (JSONException e) {
+                    GoLogger.log('E', TAG, "ERROR in getBuilderPersonnel: " + e.getMessage());
+                    callback.onFailure("Error in parsing builder personnel data, please notify support");
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getBuilderPersonnel");
+                callback.onFailure("No connection!");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getBuilderPersonnel");
+                callback.onFailure("Request timed out!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getBuilderPersonnel: " + errorMessage);
+                callback.onFailure("Error! Please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest getBuilderPersonnel(RequestHomeAccessViewModel vm, int builderId, int locationId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_BUILDER_PERSONNEL_URL, builderId, locationId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                    BuilderPersonnel i = new BuilderPersonnel();
+                    i.setBuilderPersonnelId(obj.optInt("BuilderPersonnelID"));
+                    i.setPersonnelName(obj.optString("PersonnelName"));
+                    i.setInitials(obj.optString("Initials"));
+                    i.setAddress1(obj.optString("Address1"));
+                    i.setAddress2(obj.optString("Address2"));
+                    vm.insertBuilderPersonnel(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getBuilderPersonnel: " + e.getMessage());
                     callback.onFailure("Error in parsing builder personnel data, please notify support");
@@ -1037,6 +1041,34 @@ public class GoAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 GoLogger.log('E', TAG, "ERROR in postShareTransferHomes: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public StringRequest postRequestHomeAccess(int builderPersonnelId, int locationId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(POST_REQUEST_HOME_ACCESS_URL, builderPersonnelId, locationId);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in postRequestHomeAccess.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in postRequestHomeAccess.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in postRequestHomeAccess: " + errorMessage);
                 callback.onFailure("Error! Please contact support...");
             }
         }) {
