@@ -27,6 +27,13 @@ import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -109,19 +116,40 @@ public class ScheduleInspectionActivity extends BaseActivity {
             String notes = mTextViewNotes.getText().toString().isEmpty() ? mTextViewNotes.getText().toString() : "";
             int userId = mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1);
 
-            apiQueue.getRequestQueue().add(apiQueue.postScheduleInspection(locationId, address, requestDate, inspectionTypeId, poNumber, notes, userId, timeAdjustHours, new ServerCallback() {
-                @Override
-                public void onSuccess(String message) {
-                    Snackbar.make(mConstraintLayout, "Inspection succesfully scheduled", Snackbar.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
-                    startActivity(intent);
-                }
+            String validityCheck = validityCheck(requestDate, t);
 
-                @Override
-                public void onFailure(String message) {
-                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
-                }
-            }));
+            if (validityCheck.equals("Success")) {
+                String finalTimeAdjustHours = timeAdjustHours;
+                apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(requestDate, new ServerCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        if (message.equals("Holiday")) {
+                            Snackbar.make(mConstraintLayout, "Error! Cannot schedule on a holiday!", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            apiQueue.getRequestQueue().add(apiQueue.postScheduleInspection(locationId, address, requestDate, inspectionTypeId, poNumber, notes, userId, finalTimeAdjustHours, new ServerCallback() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Snackbar.make(mConstraintLayout, "Inspection successfully scheduled", Snackbar.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+                                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                                }
+                            }));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                }));
+            } else {
+                Snackbar.make(mConstraintLayout, "Error! " + validityCheck, Snackbar.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -172,5 +200,43 @@ public class ScheduleInspectionActivity extends BaseActivity {
                 Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
             }
         }));
+    }
+
+    public String validityCheck(String dateToCheck, InspectionType inspectionType) {
+        if (inspectionType.getInspectionTypeId() == -1) {
+            return "Please select an inspection type!";
+        }
+
+        if (dateToCheck == "") {
+            return "Please enter a date!";
+        }
+
+        LocalDate requestDate = LocalDate.parse(dateToCheck, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDate tomorrow = currentDate.toLocalDate().plusDays(1);
+        LocalTime threeOClock = LocalTime.of(14, 59);
+
+        if (requestDate.isBefore(ChronoLocalDate.from(currentDate))) {
+            return "Cannot schedule before today!";
+        }
+
+        if (requestDate.equals(currentDate.toLocalDate())) {
+            return "Cannot schedule for today!";
+        }
+
+        if (currentDate.toLocalTime().isAfter(threeOClock) && requestDate.equals(tomorrow)) {
+            return "Cannot schedule for tomorrow if it's past 3:00!";
+        }
+
+        if (requestDate.getDayOfWeek() == DayOfWeek.SATURDAY || requestDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return "Cannot schedule for the weekend!";
+        }
+
+        if (currentDate.getDayOfWeek() == DayOfWeek.SATURDAY || currentDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            if (requestDate == LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY))) {
+                return "Cannot schedule for Monday if it's the weekend!";
+            }
+        }
+        return "Success";
     }
 }

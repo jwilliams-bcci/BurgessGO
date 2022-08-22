@@ -2,9 +2,12 @@ package com.burgess.burgessgo.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +24,8 @@ import com.burgess.burgessgo.R;
 import com.burgess.burgessgo.ServerCallback;
 import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LOGIN";
@@ -41,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        checkPermissions();
     }
 
     private void initializeViews() {
@@ -89,6 +95,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         GoAPIQueue.getInstance().getRequestQueue().add(loginRequest);
+    }
+
+    private void checkPermissions() {
+        ArrayList<String> permissionRequests = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (permissionRequests.size() > 0) {
+            requestPermissions(permissionRequests.toArray(new String[permissionRequests.size()]), 100);
+        }
     }
 
     private void showSpinner() {

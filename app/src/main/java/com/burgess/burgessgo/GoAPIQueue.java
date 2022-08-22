@@ -73,6 +73,7 @@ public class GoAPIQueue {
     private static final String GET_OPEN_DEFECTS_AT_LOCATION_URL = "GetOpenDefectsAtLocation?locationId=%s";
     private static final String GET_INSPECTION_TYPES_URL = "GetInspectionTypes?locationId=%s&userId=%s";
     private static final String GET_REPORT_DATA_URL = "GetReportData?InspectionId=%s&SecurityUserId=%s";
+    private static final String GET_CHECK_HOLIDAY_URL = "GetCheckHoliday?requestDate=%s";
     private static final String POST_RESCHEDULE_INSPECTION_URL = "PostRescheduleInspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
     private static final String POST_SCHEDULE_REINSPECTION_URL = "PostScheduleReinspection?inspectionId=%s&requestDate=%s&userId=%s&poNumber=%s&inspectionNotes=%s";
     private static final String POST_SEND_EMAIL_URL = "PostSendEmail?inspectionId=%s&securityUserId=%s&builderPersonnelId=%s&customEmail=%s&ccSupervisor=%s&customMessage=%s";
@@ -855,8 +856,40 @@ public class GoAPIQueue {
         };
         return request;
     }
-    //endregion
+    public StringRequest getCheckHoliday(String requestDate, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_CHECK_HOLIDAY_URL, requestDate);
 
+        StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
+            if (Integer.parseInt(response) == 1) {
+                callback.onSuccess("Holiday");
+            } else {
+                callback.onSuccess("NoHoliday");
+            }
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                GoLogger.log('E', TAG, "Lost connection in getCheckHoliday.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                GoLogger.log('E', TAG, "Request timed out in getCheckHoliday.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                GoLogger.log('E', TAG, "ERROR in getCheckHoliday: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    //endregion
+    //region POST Requests
     public StringRequest postRescheduleInspection(int inspectionId, String requestDate, String poNumber, String inspectionNotes, int userId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(POST_RESCHEDULE_INSPECTION_URL, inspectionId, requestDate, userId, poNumber, inspectionNotes);
@@ -1081,4 +1114,5 @@ public class GoAPIQueue {
         };
         return request;
     }
+    //endregion
 }

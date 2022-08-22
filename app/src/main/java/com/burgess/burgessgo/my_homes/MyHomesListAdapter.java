@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import data.models.Home;
@@ -40,9 +41,7 @@ public class MyHomesListAdapter extends RecyclerView.Adapter<MyHomesViewHolder> 
         this.queue = queue;
         this.vm = vm;
         selectedItems = new int[homeList.size()];
-        for (int lcv = 0; lcv < selectedItems.length; lcv++) {
-            selectedItems[lcv] = 0;
-        }
+        Arrays.fill(selectedItems, 0);
     }
 
     @NonNull

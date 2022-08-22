@@ -79,7 +79,7 @@ public class GoLogger {
         }
     }
 
-    public static Intent sendLogFile(String securityUserId, String versionName) {
+    public static Intent sendLogFile(int securityUserId, String versionName) {
         Uri logFileUri = FileProvider.getUriForFile(ctx, "com.burgess.burgessgo", logFile);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("vnd.android.cursor.dir/email");

@@ -28,7 +28,6 @@ public class Home implements Parcelable {
         Address = address;
         BuilderPersonnelList = builderPersonnelList;
         MAXBuilderPersonnelIDRequestingAccess = builderPersonnelRequestingAccess;
-        IsSelected = isSelected;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -40,7 +39,6 @@ public class Home implements Parcelable {
         InspectionCountRemaining = in.readInt();
         StreetName = in.readString();
         MAXBuilderPersonnelIDRequestingAccess = in.readInt();
-        IsSelected = in.readBoolean();
     }
 
     public static final Creator<Home> CREATOR = new Creator<Home>() {
@@ -71,7 +69,6 @@ public class Home implements Parcelable {
         parcel.writeInt(InspectionCountRemaining);
         parcel.writeString(StreetName);
         parcel.writeInt(MAXBuilderPersonnelIDRequestingAccess);
-        parcel.writeBoolean(IsSelected);
     }
 
     //region GETTERS AND SETTERS

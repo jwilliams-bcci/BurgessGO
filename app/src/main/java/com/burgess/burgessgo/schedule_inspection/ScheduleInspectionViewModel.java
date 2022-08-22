@@ -12,6 +12,7 @@ import data.models.InspectionType;
 
 public class ScheduleInspectionViewModel extends AndroidViewModel {
     private List<InspectionType> inspectionTypeList = new ArrayList<>();
+    private boolean holiday = false;
 
     public ScheduleInspectionViewModel(@NonNull Application application) {
         super(application);
@@ -21,4 +22,7 @@ public class ScheduleInspectionViewModel extends AndroidViewModel {
     public List<InspectionType> getInspectionTypeList() { return inspectionTypeList; }
     public void clearInspectionTypeList() { inspectionTypeList.clear(); }
     public void insertHelperInspectionType() { inspectionTypeList.add(0, new InspectionType(-1, "Select an inspection type.")); }
+
+    public boolean isHoliday() { return holiday; }
+    public void setHoliday(boolean isHoliday) { holiday = isHoliday; }
 }
