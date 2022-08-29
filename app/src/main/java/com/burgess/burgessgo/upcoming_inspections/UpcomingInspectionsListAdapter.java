@@ -34,7 +34,7 @@ public class UpcomingInspectionsListAdapter extends RecyclerView.Adapter<Upcomin
     @NonNull
     @Override
     public UpcomingInspectionsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inspection, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_upcoming_inspection, parent, false);
         return new UpcomingInspectionsViewHolder(view);
     }
 
@@ -51,7 +51,7 @@ public class UpcomingInspectionsListAdapter extends RecyclerView.Adapter<Upcomin
             mCurrentSectionHeader = dateDisplay;
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.getConstraintLayoutLower().setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
             intent.putExtra(InspectionDetailsActivity.INTENT_EXTRA, i);
             v.getContext().startActivity(intent);
@@ -61,6 +61,7 @@ public class UpcomingInspectionsListAdapter extends RecyclerView.Adapter<Upcomin
         holder.getTextViewCommunity().setText(i.getCommunityName());
         holder.getTextViewAddress().setText(i.getAddressToDisplay());
         holder.getTextViewInspectionType().setText(i.getTypeName());
+        holder.getTextViewInspectionType().setSelected(true);
     }
 
     @Override

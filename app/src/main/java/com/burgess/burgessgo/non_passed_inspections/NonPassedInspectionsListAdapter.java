@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.R;
@@ -36,7 +34,7 @@ public class NonPassedInspectionsListAdapter extends RecyclerView.Adapter<NonPas
     @NonNull
     @Override
     public NonPassedInspectionsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inspection, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_upcoming_inspection, parent, false);
         return new NonPassedInspectionsViewHolder(view);
     }
 

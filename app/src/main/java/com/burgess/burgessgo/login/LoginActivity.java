@@ -1,5 +1,10 @@
 package com.burgess.burgessgo.login;
 
+import static com.burgess.burgessgo.Constants.PREF;
+import static com.burgess.burgessgo.Constants.PREF_LOGIN_NAME;
+import static com.burgess.burgessgo.Constants.PREF_LOGIN_PASSWORD;
+import static com.burgess.burgessgo.Constants.PREF_REMEMBER_CREDENTIALS;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -7,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +20,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -35,13 +42,22 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private Button mButtonLogin;
+    private CheckBox mCheckBoxRememberCredentials;
     private ProgressBar mProgressBar;
     private LinearLayout mLockScreen;
+
+    // Class members
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Prepare shared preferences
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
 
         initializeViews();
         initializeButtonListeners();
@@ -54,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditTextUserName = findViewById(R.id.login_editText_userName);
         mEditTextPassword = findViewById(R.id.login_editText_password);
         mButtonLogin = findViewById(R.id.login_button_login);
+        mCheckBoxRememberCredentials = findViewById(R.id.login_checkBox_remember_credentials);
         mProgressBar = findViewById(R.id.login_progress_bar);
         mLockScreen = findViewById(R.id.login_lock_screen);
     }
@@ -62,6 +79,15 @@ public class LoginActivity extends AppCompatActivity {
         mButtonLogin.setOnClickListener(v -> {
             String userName = mEditTextUserName.getText().toString();
             String password = mEditTextPassword.getText().toString();
+
+            if (mCheckBoxRememberCredentials.isChecked()) {
+                mEditor.putBoolean(PREF_REMEMBER_CREDENTIALS, true);
+                mEditor.putString(PREF_LOGIN_NAME, userName);
+                mEditor.putString(PREF_LOGIN_PASSWORD, password);
+            } else {
+                mEditor.putBoolean(PREF_REMEMBER_CREDENTIALS, false);
+            }
+            mEditor.apply();
 
             // Hide keyboard on button click
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -74,6 +100,12 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeDisplayContent() {
         mEditTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
         mEditTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+
+        if (mSharedPreferences.getBoolean(PREF_REMEMBER_CREDENTIALS, false)) {
+            mCheckBoxRememberCredentials.setChecked(true);
+            mEditTextUserName.setText(mSharedPreferences.getString(PREF_LOGIN_NAME, "NOT FOUND"));
+            mEditTextPassword.setText(mSharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
+        }
     }
 
     private void loginUser(String userName, String password) {

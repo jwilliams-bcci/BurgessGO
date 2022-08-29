@@ -207,7 +207,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
             return "Please select an inspection type!";
         }
 
-        if (dateToCheck == "") {
+        if (dateToCheck.equals("")) {
             return "Please enter a date!";
         }
 

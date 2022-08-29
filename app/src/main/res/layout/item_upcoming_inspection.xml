@@ -21,9 +21,8 @@
             android:id="@+id/item_inspection_textView_inspection_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             android:textColor="@color/burgessBlue"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +33,6 @@
         android:id="@+id/item_inspection_constraint_layout_lower"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorLightGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_inspection_constraint_layout_upper">
@@ -46,21 +44,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Community"
+            android:text="@string/community"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/item_inspection_imageview_arrow"
-            android:layout_width="32dp"
-            android:layout_height="27dp"
-            android:layout_marginEnd="8dp"
-            android:rotation="90"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/arrow_up_float" />
 
         <TextView
             android:id="@+id/item_inspection_textView_address"
@@ -69,19 +57,30 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Address"
-            app:layout_constraintEnd_toStartOf="@+id/item_inspection_imageview_arrow"
+            android:text="@string/address"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_inspection_textView_inspection_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Inspection Type"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/inspection_type"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/item_inspection_textView_address"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/item_inspection_textView_address" />
 
         <androidx.constraintlayout.widget.Guideline

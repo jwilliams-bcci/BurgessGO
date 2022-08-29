@@ -36,4 +36,6 @@
     <string name="item_description">Item Description</string>
     <string name="deviation_text">Deviation Text</string>
     <string name="add_new_address">Add New Address</string>
+    <string name="remember_credentials">Remember Credentials</string>
+    <string name="community">Community</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -40,6 +41,8 @@ public class UpcomingInspectionsActivity extends BaseActivity {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private UpcomingInspectionsListAdapter mListAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private DividerItemDecoration mDividerItemDecoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,10 @@ public class UpcomingInspectionsActivity extends BaseActivity {
     public void initializeDisplayContent() {
         mSwipeRefreshLayout.setOnRefreshListener(this::updateInspectionList);
         mListAdapter = new UpcomingInspectionsListAdapter();
-        mRecyclerInspectionList.setLayoutManager(new LinearLayoutManager(this));
+        mLayoutManager = new LinearLayoutManager(this);
+        mDividerItemDecoration = new DividerItemDecoration(this, mLayoutManager.getOrientation());
+        mRecyclerInspectionList.addItemDecoration(mDividerItemDecoration);
+        mRecyclerInspectionList.setLayoutManager(mLayoutManager);
         mRecyclerInspectionList.setAdapter(mListAdapter);
         updateInspectionList();
     }

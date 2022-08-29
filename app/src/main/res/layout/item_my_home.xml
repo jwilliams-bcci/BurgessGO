@@ -19,14 +19,16 @@
 
         <TextView
             android:id="@+id/item_my_home_textView_address"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:layout_marginEnd="8dp"
+            android:text="@string/address"
             android:textColor="@color/colorWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/item_my_home_imageView_arrow"
+            app:layout_constraintStart_toStartOf="@+id/guideline9"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -42,13 +44,25 @@
 
         <TextView
             android:id="@+id/item_my_home_textView_community"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:layout_marginEnd="8dp"
+            android:text="@string/community"
             android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="111dp"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -72,7 +86,7 @@
             android:background="@drawable/button_rounded_orange"
             android:text="Schedule New Inspection"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -86,6 +100,7 @@
             android:background="@drawable/button_rounded_orange"
             android:text="Open Defects"
             android:textColor="@color/colorWhite"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,7 +135,7 @@
                     android:layout_weight="1"
                     android:text="Date"
                     android:textAlignment="viewStart"
-                    android:textSize="12sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,7 +143,7 @@
                     android:layout_weight="2"
                     android:text="Type"
                     android:textAlignment="viewStart"
-                    android:textSize="12sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,7 +151,7 @@
                     android:layout_weight="1"
                     android:text="Status"
                     android:textAlignment="center"
-                    android:textSize="12sp" />
+                    android:textSize="16dp" />
             </TableRow>
 
         </TableLayout>

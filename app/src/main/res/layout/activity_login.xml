@@ -25,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:autofillHints=""
         android:ems="10"
@@ -35,16 +35,17 @@
         android:text="jbuild"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/login_imageView_logo" />
 
     <EditText
         android:id="@+id/login_editText_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:autofillHints=""
         android:ems="10"
@@ -54,6 +55,7 @@
         android:text="pass"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,10 +65,11 @@
         android:id="@+id/login_button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/burgessOrange"
         android:text="@string/Login"
         android:textColor="#311B92"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_editText_password" />
@@ -83,13 +86,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/login_imageView_logo"
         android:layout_width="320dp"
         android:layout_height="135dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/app_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_banner" />
+
+    <CheckBox
+        android:id="@+id/login_checkBox_remember_credentials"
+        style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/colorWhite"
+        android:minHeight="48dp"
+        android:text="@string/remember_credentials"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button_login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

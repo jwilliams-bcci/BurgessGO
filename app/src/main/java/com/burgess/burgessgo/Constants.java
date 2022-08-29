@@ -11,4 +11,7 @@ public class Constants {
     public static final String PREF_SECURITY_USER_ID = "SecurityUserId";
     public static final String PREF_BUILDER_ID = "BuilderId";
     public static final String PREF_BUILDER_PERSONNEL_ID = "BuilderPersonnelId";
+    public static final String PREF_REMEMBER_CREDENTIALS = "RememberCredentials";
+    public static final String PREF_LOGIN_NAME = "LoginName";
+    public static final String PREF_LOGIN_PASSWORD = "LoginPassword";
 }
