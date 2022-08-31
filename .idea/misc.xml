@@ -30,7 +30,6 @@
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_my_home.xml" value="0.5" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_request_home_access.xml" value="0.28532608695652173" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_share_transfer_home.xml" value="0.28532608695652173" />
-        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/item_upcoming_inspection.xml" value="0.34601449275362317" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/menu/menu_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/xml/file_paths.xml" value="0.34601449275362317" />
@@ -49,9 +48,11 @@
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_home.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inactive_home.xml" value="0.30027173913043476" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inspection.xml" value="0.33" />
+        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_inspection_table_row.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_my_home.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_request_home_access.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_share_transfer_home.xml" value="0.5" />
+        <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/layout/item_upcoming_inspection.xml" value="0.30978260869565216" />
         <entry key="..\:/Projects/Android/BurgessGO/app/src/main/res/menu/menu_main.xml" value="0.36666666666666664" />
       </map>
     </option>
