@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,6 +65,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
     private ArrayAdapter<InspectionType> mSpinnerAdapter;
+    private LocalDate mNextAvailableDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +163,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, month);
             mCalendar.set(Calendar.DAY_OF_MONTH, day);
+
             mTextViewInspectionDate.setText(dateFormat.format(mCalendar.getTime()));
         };
         mTextViewInspectionDate.setOnClickListener(v -> {
@@ -170,6 +173,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
         mTextViewAddress.setText(mHome.getAddress());
 
         loadSpinner();
+        getNextAvailableDate(LocalDateTime.now().toLocalDate());
     }
 
     public void loadSpinner() {
@@ -202,6 +206,30 @@ public class ScheduleInspectionActivity extends BaseActivity {
         }));
     }
 
+    public void getNextAvailableDate(LocalDate current) {
+        LocalDate nextAvailableDate = current.plusDays(1);
+        if (nextAvailableDate.getDayOfWeek() == DayOfWeek.SATURDAY || nextAvailableDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            getNextAvailableDate(nextAvailableDate);
+        } else {
+            apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(nextAvailableDate.toString(), new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    if (message.equals("Holiday")) {
+                        getNextAvailableDate(nextAvailableDate);
+                    } else {
+                        mNextAvailableDate = nextAvailableDate;
+                        Snackbar.make(mConstraintLayout, "Next available date is: " + mNextAvailableDate.toString(), Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
+        }
+    }
+
     public String validityCheck(String dateToCheck, InspectionType inspectionType) {
         if (inspectionType.getInspectionTypeId() == -1) {
             return "Please select an inspection type!";
@@ -213,7 +241,7 @@ public class ScheduleInspectionActivity extends BaseActivity {
 
         LocalDate requestDate = LocalDate.parse(dateToCheck, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         LocalDateTime currentDate = LocalDateTime.now();
-        LocalDate tomorrow = currentDate.toLocalDate().plusDays(1);
+        LocalDate nextAvailableDay = currentDate.toLocalDate().plusDays(1);
         LocalTime threeOClock = LocalTime.of(14, 59);
 
         if (requestDate.isBefore(ChronoLocalDate.from(currentDate))) {
@@ -224,8 +252,8 @@ public class ScheduleInspectionActivity extends BaseActivity {
             return "Cannot schedule for today!";
         }
 
-        if (currentDate.toLocalTime().isAfter(threeOClock) && requestDate.equals(tomorrow)) {
-            return "Cannot schedule for tomorrow if it's past 3:00!";
+        if (currentDate.toLocalTime().isAfter(threeOClock) && requestDate.equals(mNextAvailableDate)) {
+            return "Cannot schedule for the next available day if it's past 3:00!";
         }
 
         if (requestDate.getDayOfWeek() == DayOfWeek.SATURDAY || requestDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
@@ -238,5 +266,39 @@ public class ScheduleInspectionActivity extends BaseActivity {
             }
         }
         return "Success";
+    }
+
+    public String checkHoliday(LocalDate dateToCheck) {
+        final String[] result = {""};
+        Handler handler = new Handler();
+
+        apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(dateToCheck.toString(), new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                result[0] = message;
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                result[0] = "ERROR";
+            }
+        }));
+        while (result[0] == "") {
+            try {
+                wait(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return result[0];
+    }
+
+    public LocalDate getNextAvailableDay1(LocalDate dateToCheck) {
+        LocalDate nextAvailableDay = dateToCheck;
+        while (checkHoliday(nextAvailableDay).equals("Holiday") || nextAvailableDay.getDayOfWeek() == DayOfWeek.SATURDAY || nextAvailableDay.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            nextAvailableDay = nextAvailableDay.plusDays(1);
+        }
+        return nextAvailableDay;
     }
 }

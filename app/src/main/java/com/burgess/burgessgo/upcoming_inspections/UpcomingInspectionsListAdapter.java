@@ -57,9 +57,16 @@ public class UpcomingInspectionsListAdapter extends RecyclerView.Adapter<Upcomin
             v.getContext().startActivity(intent);
         });
 
+        String addressDisplay;
+        if (i.getJobNumber().toLowerCase().startsWith("lot")) {
+            addressDisplay = i.getAddressToDisplay() + " - " + i.getJobNumber();
+        } else {
+            addressDisplay = i.getAddressToDisplay();
+        }
+
+        holder.getTextViewAddress().setText(addressDisplay);
         holder.getTextViewDate().setText(dateDisplay);
         holder.getTextViewCommunity().setText(i.getCommunityName());
-        holder.getTextViewAddress().setText(i.getAddressToDisplay());
         holder.getTextViewInspectionType().setText(i.getTypeName());
         holder.getTextViewInspectionType().setSelected(true);
     }
