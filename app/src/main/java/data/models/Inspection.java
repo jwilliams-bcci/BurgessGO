@@ -25,12 +25,13 @@ public class Inspection implements Parcelable {
     private int StreetId;
     private String City;
     private String Resolution;
+    private String JobNumber;
 
     public Inspection(){}
 
     public Inspection(int inspectionId, OffsetDateTime inspectionDate, String inspectionStatus, String communityName, String streetNumber,
                       String streetName, String addressToDisplay, String addressToDisplay2, String typeName, String typeNameDisplay, int inspectionNumber,
-                      String inspectorName, String phone, int inspectionMissed, int communityId, int streetId, String city, String resolution) {
+                      String inspectorName, String phone, int inspectionMissed, int communityId, int streetId, String city, String resolution, String jobNumber) {
         InspectionId = inspectionId;
         InspectionDate = inspectionDate;
         InspectionStatus = inspectionStatus;
@@ -49,6 +50,7 @@ public class Inspection implements Parcelable {
         StreetId = streetId;
         City = city;
         Resolution = resolution;
+        JobNumber = jobNumber;
     }
 
     protected Inspection(Parcel in) {
@@ -70,6 +72,7 @@ public class Inspection implements Parcelable {
         StreetId = in.readInt();
         City = in.readString();
         Resolution = in.readString();
+        JobNumber = in.readString();
     }
 
     public static final Creator<Inspection> CREATOR = new Creator<Inspection>() {
@@ -109,6 +112,7 @@ public class Inspection implements Parcelable {
         parcel.writeInt(StreetId);
         parcel.writeString(City);
         parcel.writeString(Resolution);
+        parcel.writeString(JobNumber);
     }
 
     //region GETTERS AND SETTERS
@@ -237,5 +241,13 @@ public class Inspection implements Parcelable {
     public void setResolution(String resolution) {
         Resolution = resolution;
     }
+
+    public String getJobNumber() {
+        return JobNumber;
+    }
+    public void setJobNumber(String jobNumber) {
+        JobNumber = jobNumber;
+    }
+
     //endregion
 }

@@ -184,6 +184,7 @@ public class GoAPIQueue {
                     i.setCommunityId(obj.optInt("CommunityID"));
                     i.setStreetId(obj.optInt("StreetID"));
                     i.setCity(obj.optString("City"));
+                    i.setJobNumber(obj.optString("JobNumber"));
                     vm.insertInspection(i);
                 } catch (JSONException e) {
                     GoLogger.log('E', TAG, "ERROR in getUpcomingInspections: " + e.getMessage());
