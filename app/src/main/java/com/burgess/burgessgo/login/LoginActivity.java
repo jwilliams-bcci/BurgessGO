@@ -13,6 +13,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.burgessgo.GoAPIQueue;
@@ -43,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEditTextPassword;
     private Button mButtonLogin;
     private CheckBox mCheckBoxRememberCredentials;
+    private TextView mTextViewVersion;
     private ProgressBar mProgressBar;
     private LinearLayout mLockScreen;
 
@@ -71,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditTextPassword = findViewById(R.id.login_editText_password);
         mButtonLogin = findViewById(R.id.login_button_login);
         mCheckBoxRememberCredentials = findViewById(R.id.login_checkBox_remember_credentials);
+        mTextViewVersion = findViewById(R.id.login_textView_version);
         mProgressBar = findViewById(R.id.login_progress_bar);
         mLockScreen = findViewById(R.id.login_lock_screen);
     }
@@ -98,6 +102,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
+        // Set the version label
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String versionName = "Version: " + pInfo.versionName;
+        mTextViewVersion.setText(versionName);
+
         mEditTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
         mEditTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
