@@ -15,11 +15,13 @@
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_help.xml" value="0.2749094202898551" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_inspection_defects.xml" value="0.5" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_inspection_details.xml" value="0.36666666666666664" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_location_defects.xml" value="0.34601449275362317" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_login.xml" value="0.34601449275362317" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_main.xml" value="0.27898550724637683" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_my_homes.xml" value="0.338768115942029" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_non_passed_inspection_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_non_passed_inspections.xml" value="0.36666666666666664" />
+        <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_report_viewer.xml" value="0.34601449275362317" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_request_home_access.xml" value="0.36666666666666664" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_reschedule_inspection.xml" value="0.34601449275362317" />
         <entry key="..\:/Dev/BurgessGO/app/src/main/res/layout/activity_schedule_inspection.xml" value="0.28532608695652173" />

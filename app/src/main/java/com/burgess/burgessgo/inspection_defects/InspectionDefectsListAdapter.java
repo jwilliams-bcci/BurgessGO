@@ -48,11 +48,11 @@ public class InspectionDefectsListAdapter extends RecyclerView.Adapter<Inspectio
             mCurrentSectionHeader = i.getDefectCategoryDisplayName();
         }
 
-        holder.getTextViewCategory().setText(i.getDefectCategoryDisplayName());
-        holder.getTextViewColumnHeader1().setText(i.getColumnHeader1());
-        holder.getTextViewColumnHeader2().setText(i.getColumnHeader2());
-        holder.getTextViewItemDescription().setText(i.getDefectItemDescription());
-        holder.getTextViewItemText().setText(i.getDeviationText());
+        holder.getTextViewCategory().setText(i.getDefectCategoryDisplayName().equals("") ? "" : i.getDefectCategoryDisplayName());
+        holder.getTextViewColumnHeader1().setText(i.getColumnHeader1().equals("") ? "" : i.getColumnHeader1());
+        holder.getTextViewColumnHeader2().setText(i.getColumnHeader2().equals("") ? "" : i.getColumnHeader2());
+        holder.getTextViewItemDescription().setText(i.getDefectItemDescription().equals("") ? "" : i.getDefectItemDescription());
+        holder.getTextViewItemText().setText(i.getDeviationText().equals("") ? "" : i.getDeviationText());
     }
 
     @Override

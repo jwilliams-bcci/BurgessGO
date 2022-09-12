@@ -148,11 +148,12 @@ public class NonPassedInspectionDetailsActivity extends BaseActivity {
 
     public void initializeDisplayContent() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String inspectionDate = mInspection.getInspectionDate().toLocalDate().format(formatter);
 
-        mTextViewAddress.setText(mInspection.getInspectionAddress());
-        mTextViewInspectionType.setText(mInspection.getTypeName());
-        mTextViewStatus.setText(mInspection.getInspectionStatus());
-        mTextViewDate.setText(mInspection.getInspectionDate().toLocalDate().format(formatter));
-        mTextViewConsultant.setText(mInspection.getInspectedBy());
+        mTextViewAddress.setText(mInspection.getInspectionAddress().equals("") ? "" : mInspection.getInspectionAddress());
+        mTextViewInspectionType.setText(mInspection.getTypeName().equals("") ? "" : mInspection.getTypeName());
+        mTextViewStatus.setText(mInspection.getInspectionStatus().equals("") ? "" : mInspection.getInspectionStatus());
+        mTextViewDate.setText(inspectionDate.equals("") ? "" : inspectionDate);
+        mTextViewConsultant.setText(mInspection.getInspectedBy().equals("") ? "" : mInspection.getInspectedBy());
     }
 }

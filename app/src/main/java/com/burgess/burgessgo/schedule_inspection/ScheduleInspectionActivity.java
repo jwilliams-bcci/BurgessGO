@@ -241,7 +241,6 @@ public class ScheduleInspectionActivity extends BaseActivity {
 
         LocalDate requestDate = LocalDate.parse(dateToCheck, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         LocalDateTime currentDate = LocalDateTime.now();
-        LocalDate nextAvailableDay = currentDate.toLocalDate().plusDays(1);
         LocalTime threeOClock = LocalTime.of(14, 59);
 
         if (requestDate.isBefore(ChronoLocalDate.from(currentDate))) {
@@ -266,39 +265,5 @@ public class ScheduleInspectionActivity extends BaseActivity {
             }
         }
         return "Success";
-    }
-
-    public String checkHoliday(LocalDate dateToCheck) {
-        final String[] result = {""};
-        Handler handler = new Handler();
-
-        apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(dateToCheck.toString(), new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                result[0] = message;
-            }
-
-            @Override
-            public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
-                result[0] = "ERROR";
-            }
-        }));
-        while (result[0] == "") {
-            try {
-                wait(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return result[0];
-    }
-
-    public LocalDate getNextAvailableDay1(LocalDate dateToCheck) {
-        LocalDate nextAvailableDay = dateToCheck;
-        while (checkHoliday(nextAvailableDay).equals("Holiday") || nextAvailableDay.getDayOfWeek() == DayOfWeek.SATURDAY || nextAvailableDay.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            nextAvailableDay = nextAvailableDay.plusDays(1);
-        }
-        return nextAvailableDay;
     }
 }

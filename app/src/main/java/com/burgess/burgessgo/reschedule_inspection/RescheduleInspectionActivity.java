@@ -23,12 +23,21 @@ import com.burgess.burgessgo.upcoming_inspections.UpcomingInspectionsActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import data.models.Inspection;
+import data.models.InspectionType;
 
 public class RescheduleInspectionActivity extends BaseActivity {
     private static final String TAG = "RESCHEDULE_INSPECTION";
@@ -51,6 +60,7 @@ public class RescheduleInspectionActivity extends BaseActivity {
     private final Calendar mCalendar = Calendar.getInstance();
     private DateTimeFormatter mFormatter;
     private SimpleDateFormat mDateFormat;
+    private LocalDate mNextAvailableDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,23 +96,51 @@ public class RescheduleInspectionActivity extends BaseActivity {
 
     public void initializeButtons() {
         mButtonReschedule.setOnClickListener(v -> {
-            String date = mTextViewDate.getText().toString();
+            TimeZone tz = TimeZone.getDefault();
+            Calendar cal = GregorianCalendar.getInstance(tz);
+            int offsetInMillis = tz.getOffset(cal.getTimeInMillis());
+            String timeAdjustHours = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
+            timeAdjustHours = (offsetInMillis >= 0 ? "+" : "-") + timeAdjustHours;
+
+            String requestDate = mTextViewDate.getText().toString();
             String poNumber = mTextViewPONumber.getText().toString().isEmpty() ? mTextViewPONumber.getText().toString() : "";
             String notes = mTextViewNotes.getText().toString().isEmpty() ? mTextViewNotes.getText().toString() : "";
             int userId = mSharedPreferences.getInt(PREF_SECURITY_USER_ID, -1);
-            apiQueue.getRequestQueue().add(apiQueue.postRescheduleInspection(mInspection.getInspectionId(), date, poNumber, notes, userId, new ServerCallback() {
-                        @Override
-                        public void onSuccess(String message) {
-                            Snackbar.make(mConstraintLayout, "Reschedule request sent successfully", Snackbar.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
-                            startActivity(intent);
-                        }
 
-                        @Override
-                        public void onFailure(String message) {
-                            Snackbar.make(mConstraintLayout, "Reschedule request failed yo, fix that shiz: " + message, Snackbar.LENGTH_SHORT).show();
+            String validityCheck = validityCheck(requestDate);
+
+            if (validityCheck.equals("Success")) {
+                String finalTimeAdjustHours = timeAdjustHours;
+                apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(requestDate, new ServerCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        if (message.equals("Holiday")) {
+                            Snackbar.make(mConstraintLayout, "Error! Cannot schedule on a holiday!", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            apiQueue.getRequestQueue().add(apiQueue.postRescheduleInspection(mInspection.getInspectionId(), requestDate, poNumber, notes, userId, new ServerCallback() {
+                                @Override
+                                public void onSuccess(String message) {
+                                    Snackbar.make(mConstraintLayout, "Reschedule request sent successfully", Snackbar.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getBaseContext(), UpcomingInspectionsActivity.class);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+                                    Snackbar.make(mConstraintLayout, "Reschedule request failed yo, fix that shiz: " + message, Snackbar.LENGTH_SHORT).show();
+                                }
+                            }));
                         }
-                    }));
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                    }
+                }));
+            } else {
+                Snackbar.make(mConstraintLayout, "Error! " + validityCheck, Snackbar.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -123,5 +161,63 @@ public class RescheduleInspectionActivity extends BaseActivity {
         mTextViewDate.setOnClickListener(v -> {
             new DatePickerDialog(this, date, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
         });
+        getNextAvailableDate(LocalDateTime.now().toLocalDate());
+    }
+
+    public void getNextAvailableDate(LocalDate current) {
+        LocalDate nextAvailableDate = current.plusDays(1);
+        if (nextAvailableDate.getDayOfWeek() == DayOfWeek.SATURDAY || nextAvailableDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            getNextAvailableDate(nextAvailableDate);
+        } else {
+            apiQueue.getRequestQueue().add(apiQueue.getCheckHoliday(nextAvailableDate.toString(), new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    if (message.equals("Holiday")) {
+                        getNextAvailableDate(nextAvailableDate);
+                    } else {
+                        mNextAvailableDate = nextAvailableDate;
+                        Snackbar.make(mConstraintLayout, "Next available date is: " + mNextAvailableDate.toString(), Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                }
+            }));
+        }
+    }
+
+    public String validityCheck(String dateToCheck) {
+        if (dateToCheck.equals("")) {
+            return "Please enter a date!";
+        }
+
+        LocalDate requestDate = LocalDate.parse(dateToCheck, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalTime threeOClock = LocalTime.of(14, 59);
+
+        if (requestDate.isBefore(ChronoLocalDate.from(currentDate))) {
+            return "Cannot schedule before today!";
+        }
+
+        if (requestDate.equals(currentDate.toLocalDate())) {
+            return "Cannot schedule for today!";
+        }
+
+        if (currentDate.toLocalTime().isAfter(threeOClock) && requestDate.equals(mNextAvailableDate)) {
+            return "Cannot schedule for the next available day if it's past 3:00!";
+        }
+
+        if (requestDate.getDayOfWeek() == DayOfWeek.SATURDAY || requestDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return "Cannot schedule for the weekend!";
+        }
+
+        if (currentDate.getDayOfWeek() == DayOfWeek.SATURDAY || currentDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            if (requestDate == LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY))) {
+                return "Cannot schedule for Monday if it's the weekend!";
+            }
+        }
+        return "Success";
     }
 }

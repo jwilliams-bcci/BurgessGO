@@ -3,18 +3,14 @@ package com.burgess.burgessgo.activate_homes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.burgessgo.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import data.models.Home;
 
@@ -32,7 +28,7 @@ public class ActivateHomesListAdapter extends RecyclerView.Adapter<ActivateHomes
     @NonNull
     @Override
     public ActivateHomesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_activate_home, parent, false);
         return new ActivateHomesViewHolder(view);
     }
 
