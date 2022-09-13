@@ -39,4 +39,6 @@
     <string name="remember_credentials">Remember Credentials</string>
     <string name="community">Community</string>
     <string name="inspection_date">Inspection Date</string>
+    <string name="version">Version:</string>
+    <string name="activated">Activated</string>
 </resources>

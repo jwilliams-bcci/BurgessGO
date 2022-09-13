@@ -104,7 +104,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/button_rounded_orange"
+        android:background="@drawable/button_rounded_blue"
         android:text="Schedule Inspection"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"

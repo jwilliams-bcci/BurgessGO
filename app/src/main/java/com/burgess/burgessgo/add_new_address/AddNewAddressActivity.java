@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.burgess.burgessgo.BaseActivity;
 import com.burgess.burgessgo.GoAPIQueue;
 import com.burgess.burgessgo.GoLogger;
 import com.burgess.burgessgo.R;
@@ -26,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar;
 import data.models.Community;
 import data.models.Street;
 
-public class AddNewAddressActivity extends AppCompatActivity {
+public class AddNewAddressActivity extends BaseActivity {
     private static final String TAG = "ADD_NEW_ADDRESS";
 
     // View components

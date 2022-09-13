@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activate_homes_toolbar"
-        tools:listitem="@layout/item_home" />
+        tools:listitem="@layout/item_activate_home" />
 
     <Button
         android:id="@+id/activate_homes_button_submit"
@@ -39,7 +39,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/button_rounded_orange"
+        android:background="@drawable/button_rounded_blue"
         android:text="Submit"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_address" />
@@ -35,6 +36,7 @@
         android:id="@+id/inspection_details_textView_inspection_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_inspection_type" />
@@ -43,6 +45,7 @@
         android:id="@+id/inspection_details_textView_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_status" />
@@ -51,6 +54,7 @@
         android:id="@+id/inspection_details_textView_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_date" />
@@ -59,6 +63,7 @@
         android:id="@+id/inspection_details_textView_consultant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_textView_address"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_textView_address"
         app:layout_constraintTop_toTopOf="@+id/inspection_defects_label_consultant" />
@@ -86,6 +91,8 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@id/inspection_details_textView_address"
         android:text="@string/address"
+        android:textColor="@color/burgessBlue"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection_details_toolbar" />
@@ -98,6 +105,8 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@id/inspection_details_textView_inspection_type"
         android:text="@string/inspection_type"
+        android:textColor="@color/burgessBlue"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_1" />
@@ -110,6 +119,8 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@id/inspection_details_textView_status"
         android:text="@string/status"
+        android:textColor="@color/burgessBlue"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_2" />
@@ -122,6 +133,8 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@id/inspection_details_textView_date"
         android:text="@string/date"
+        android:textColor="@color/burgessBlue"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_3" />
@@ -134,6 +147,8 @@
         android:layout_marginEnd="8dp"
         android:labelFor="@id/inspection_details_textView_consultant"
         android:text="@string/consultant"
+        android:textColor="@color/burgessBlue"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/inspection_defects_label_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_defects_divider_4" />
