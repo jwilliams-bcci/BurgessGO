@@ -27,6 +27,6 @@ public class ReportViewerActivity extends AppCompatActivity {
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("https://portal.burgess-inc.com" + reportUrl);
-                ///Report/ReportViewer.aspx?ReportName=SW5zcGVjdGlvblJlcG9ydFJlc2lkZW50aWFsNlNURENvbW1lbnREZWZlY3RQaG90bw==&ReportOutput=QnJvd3Nlcg==&InspectionID=MjYwNzc4Ng==");
+        ///Report/ReportViewer.aspx?ReportName=SW5zcGVjdGlvblJlcG9ydFJlc2lkZW50aWFsNlNURENvbW1lbnREZWZlY3RQaG90bw==&ReportOutput=QnJvd3Nlcg==&InspectionID=MjYwNzc4Ng==");
     }
 }
